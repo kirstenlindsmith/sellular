@@ -4,7 +4,6 @@ import { navigate, validateStringLength } from '../../../helpers';
 import { useTextInputState, useUser } from '../../../hooks';
 import Input from '../../Input';
 import styles from './SignIn.styles';
-import './SignIn.css';
 import Button from '../../Button';
 
 const SignIn = () => {

@@ -12,14 +12,6 @@ const styles = {
     color: colors.teal,
     fontSize: '1.5rem',
   },
-  fieldSection: {
-    ...shared.column,
-    flexDirection: 'column-reverse',
-    gap: '0.25rem',
-  },
-  label: {
-    fontSize: '0.875rem',
-  },
 };
 
 export default styles;
