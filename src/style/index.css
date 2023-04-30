@@ -1,0 +1,53 @@
+:root {
+  --white: #f5f5f5;
+  --black: #333333;
+  --textSecondary: #6d6d6d;
+  --textDisabled: #a2a2a2;
+  --red: #bd3c3c;
+  --orage: #ba5f2b;
+  --yellow: #d1c462;
+  --green: #629e44;
+  --teal: #489c95;
+  --blue: #447b9e;
+  --purple: #6f609e;
+  --pink: #ba72b4;
+}
+
+html {
+  min-height: 100%;
+  font-family: Tahoma, Verdana, sans-serif;
+}
+
+body,
+#root {
+  margin: 0;
+  font-size: 16px;
+  height: 100vh;
+  color: var(--black);
+  background-color: var(--white);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-decoration-style: solid;
+}
+
+a:hover,
+a:focus {
+  text-decoration-style: dotted;
+}
+
+/* by default allow \n to be properly interpreted as linebreaks within table cells */
+td {
+  white-space: pre-wrap;
+}
+
+button,
+link {
+  cursor: pointer;
+}
