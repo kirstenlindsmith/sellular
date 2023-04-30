@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
 import { navigate } from '../../../helpers';
 import { useUser } from '../../../hooks';
-import Link from '../../Link';
+import ItemsList from './components/ItemsList';
+import sharedStyles from '../../../style/shared.styles';
+import './AllItems.css';
 
-const Home = () => {
+const AllItems = () => {
   const { signedIn } = useUser();
 
   useEffect(() => {
@@ -12,11 +14,13 @@ const Home = () => {
   }, [signedIn]);
 
   return (
-    <>
-      <div>Home</div>
-      <Link href={frontendRoutes.signOut}>Sign out</Link>
-    </>
+    <div
+      className='standard-page fixed-page'
+      style={sharedStyles.lightBluePage}
+    >
+      <ItemsList />
+    </div>
   );
 };
 
-export default Home;
+export default AllItems;

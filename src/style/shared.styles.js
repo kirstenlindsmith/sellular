@@ -17,13 +17,13 @@ const core = {
   },
 };
 
-const pageContainer = {
+const lightBluePage = {
   ...core.column,
   backgroundColor: addHexOpacity(colors.teal, opacity.light),
 };
 
 const sharedStyles = {
   ...core,
-  pageContainer,
+  lightBluePage,
 };
 export default sharedStyles;

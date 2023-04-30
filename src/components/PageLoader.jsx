@@ -12,8 +12,11 @@ const loaderTextStyles = {
   color: colors.blue,
 };
 
-const PageLoader = ({ text }) => (
-  <div className='centered-page' style={sharedStyles.pageContainer}>
+const PageLoader = ({ text, style }) => (
+  <div
+    className='centered-page'
+    style={{ ...sharedStyles.lightBluePage, ...(style ?? {}) }}
+  >
     <img src={blink} alt='blinking eye' style={blinkStyles} />
     <h1 style={loaderTextStyles}>{text || 'Loading...'}</h1>
   </div>

@@ -5,7 +5,7 @@ import { interactColor } from '../helpers';
 const buttonSizes = {
   small: {
     fontSize: '0.813rem',
-    fontWeight: 500,
+    fontWeight: 550,
     minHeight: 'none',
   },
   medium: {
@@ -40,6 +40,10 @@ const buttonStyles = (color, size, disabled, fullWidth) => ({
 const hiddenOnLoadStyle = (loading) => ({
   opacity: loading ? 0 : 1,
   visibility: loading ? 'hidden' : 'visible',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '0.25rem',
 });
 
 const Button = ({
@@ -83,7 +87,11 @@ const Button = ({
       {...props}
     >
       {loading && 'Loading...'}
-      <div style={hiddenOnLoadStyle(loading)} aria-hidden={loading}>
+      <div
+        className='button-content'
+        style={hiddenOnLoadStyle(loading)}
+        aria-hidden={loading}
+      >
         {children}
       </div>
     </button>

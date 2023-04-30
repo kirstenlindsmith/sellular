@@ -15,7 +15,7 @@ const initialValue = {
 export const UserContext = createContext(initialValue);
 
 const UserProvider = ({ children }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState(() => getItem(storageKeys.userName));
 
   const resetLoadingState = useCallback(() => setLoading(false), []);

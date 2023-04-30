@@ -15,7 +15,12 @@ const SignOut = () => {
     }
   }, [setLoading, signOut, signedIn]);
 
-  return <div className='centered-page' style={sharedStyles.pageContainer} />;
+  return (
+    <div
+      className='centered-page'
+      style={sharedStyles.pageConlightBluePagetainer}
+    />
+  );
 };
 
 export default SignOut;

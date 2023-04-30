@@ -1,4 +1,6 @@
+import AuthBar from './components/AuthBar';
 import ErrorBoundary from './components/ErrorBoundary';
+import ItemsProvider from './context/itemsContext';
 import Router from './Router';
 import SkipToMainContent from './components/SkipToMainContent';
 import UserProvider from './context/userContext';
@@ -8,8 +10,11 @@ function App() {
   return (
     <ErrorBoundary>
       <UserProvider>
-        <SkipToMainContent />
-        <Router />
+        <ItemsProvider>
+          <SkipToMainContent />
+          <AuthBar />
+          <Router />
+        </ItemsProvider>
       </UserProvider>
     </ErrorBoundary>
   );

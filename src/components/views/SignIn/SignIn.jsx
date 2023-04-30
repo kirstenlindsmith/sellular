@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
 import { navigate, validateStringLength } from '../../../helpers';
-import { useTextInputState, useTimeoutAction, useUser } from '../../../hooks';
+import { useTextInputState, useUser } from '../../../hooks';
 import Button from '../../Button';
 import Input from '../../Input';
 import sharedStyles from '../../../style/shared.styles';
@@ -28,7 +28,7 @@ const SignIn = () => {
   );
 
   return (
-    <div className='centered-page sign-in' style={sharedStyles.pageContainer}>
+    <div className='centered-page sign-in' style={sharedStyles.lightBluePage}>
       <form onSubmit={handleSignIn}>
         <h1>Welcome</h1>
         <Input

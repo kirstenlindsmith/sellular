@@ -1,3 +1,11 @@
+#skip-to-main {
+  top: -100rem;
+}
+
+#skip-to-main:focus {
+  top: -1rem;
+}
+
 .centered-page {
   width: 100%;
   height: 100%;
@@ -17,12 +25,21 @@
   gap: 1rem;
 }
 
-#skip-to-main {
-  top: -100rem;
+.standard-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 4.5rem 2rem 2rem;
 }
 
-#skip-to-main:focus {
-  top: -1rem;
+.fixed-page {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .input-section {

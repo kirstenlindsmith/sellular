@@ -1,5 +1,15 @@
 import { colors } from '../constants';
 
+export const getUserFontSize = () => {
+  const localFontSize = parseFloat(
+    getComputedStyle(document?.documentElement)?.fontSize
+  );
+  if (Number.isNaN(localFontSize)) {
+    throw new Error('Error accessing browser font size');
+  }
+  return localFontSize;
+};
+
 export const addHexOpacity = (
   color,
   opacityPercentage = 0.5 /* number between 0-1 */
