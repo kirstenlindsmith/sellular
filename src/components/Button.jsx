@@ -72,19 +72,11 @@ const Button = ({
     [color]
   );
 
-  const handleClick = useCallback(
-    (e) => {
-      e?.preventDefault();
-      onClick?.(e);
-    },
-    [onClick]
-  );
-
   return (
     <button
       aria-disabled={disabled}
       disabled={disabled || loading}
-      onClick={handleClick}
+      onClick={props.type === 'submit' ? undefined : onClick}
       style={currentStyle}
       onMouseOver={handleInteract('in')}
       onMouseOut={handleInteract('out')}

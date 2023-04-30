@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <>
       <div>Home</div>
-      <Link href={frontendRoutes.signIn}>Sign in</Link>
+      <Link href={frontendRoutes.signOut}>Sign out</Link>
     </>
   );
 };

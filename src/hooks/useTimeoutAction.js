@@ -4,7 +4,7 @@ let timeout;
 
 export const useTimeoutAction = (
   callback, //memoized callback to be executed after delay
-  delay //milliseconds after which callback fires
+  delay = 500 //milliseconds after which callback fires
 ) => {
   useEffect(() => {
     return () => {
@@ -14,7 +14,7 @@ export const useTimeoutAction = (
 
   const handleAction = useCallback(
     (...args) => {
-      timeout = setTimeout(() => callback(...args), delay);
+      timeout = setTimeout(() => callback?.(...args), delay);
     },
     [callback, delay]
   );
