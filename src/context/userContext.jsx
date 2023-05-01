@@ -1,6 +1,12 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { frontendRoutes, storageKeys } from '../constants';
-import { getItem, navigate, removeItem, setItem } from '../helpers';
+import {
+  getItem,
+  getLoaderDisplayTime,
+  navigate,
+  removeItem,
+  setItem,
+} from '../helpers';
 import { useTimeoutAction } from '../hooks';
 
 const initialValue = {
@@ -20,7 +26,11 @@ const UserProvider = ({ children }) => {
 
   const resetLoadingState = useCallback(() => setLoading(false), []);
   //spoofed delay to show my cute loader :)
-  const resetLoadingStateAfterDelay = useTimeoutAction(resetLoadingState, 1000);
+  const loaderTime = getLoaderDisplayTime();
+  const resetLoadingStateAfterDelay = useTimeoutAction(
+    resetLoadingState,
+    loaderTime
+  );
 
   useEffect(() => {
     if (!userName) {

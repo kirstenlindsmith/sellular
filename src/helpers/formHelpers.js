@@ -10,7 +10,7 @@ export const formatTimestamp = (inputDate) => {
   return `${month}/${day}/${year}, ${hours}:${minutes} ${isPM ? 'PM' : 'AM'}`;
 };
 
-export const formatDollars = (dollarAmount) => {
+export const formatStringToDollars = (dollarAmount) => {
   if (
     typeof dollarAmount !== 'number' ||
     isNaN(dollarAmount) ||
@@ -23,6 +23,20 @@ export const formatDollars = (dollarAmount) => {
     currency: 'USD',
   });
   return dollarFormatter.format(dollarAmount);
+};
+
+export const formatNumberToToDecimalString = (number) => {
+  if (typeof number !== 'number' || isNaN(number) || number < 0) {
+    return '0.00';
+  }
+  return number.toFixed(2);
+};
+
+export const formatStringToDecimalNumber = (string) => {
+  if (typeof string !== 'string' || !string) {
+    return 0.0;
+  }
+  return Math.round(parseFloat(string) * 1e2) / 1e2;
 };
 
 export const validateStringLength =
@@ -41,3 +55,11 @@ export const validateStringLength =
     }
     return error;
   };
+
+export const validateDollarField = (value) => {
+  if (!value) return;
+  const dollarRegex = /^(?:0|[1-9]\d+|)?(?:.?\d{0,2})?$/;
+  if (!dollarRegex.test(value)) {
+    return 'Invalid price';
+  }
+};

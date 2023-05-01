@@ -8,7 +8,7 @@ const defaultOptions = {
   initialValue: '',
   required: false,
   requiredText: 'Required',
-  minLength: 0,
+  minLength: undefined,
   normalizer: (value) => value,
   validation: (_value) => undefined,
   validateOn: 'debounce', //'touch', 'blur', 'debounce', 'debounceTouch'

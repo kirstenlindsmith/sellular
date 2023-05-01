@@ -3,6 +3,7 @@ import { backendRoutes, storageKeys } from '../constants';
 import {
   filterOutTarget,
   getArrayItem,
+  getLoaderDisplayTime,
   setArrayItem,
   setItemAttributes,
 } from '../helpers';
@@ -24,7 +25,7 @@ export const ItemsContext = createContext(initialValue);
 const ItemsProvider = ({ children }) => {
   const { userName } = useUser();
   const [loading, setLoading] = useState(false);
-  const [loadingItemIds, setLoadingItemIds] = useState(false);
+  const [loadingItemIds, setLoadingItemIds] = useState([]);
   const [userItems, setUserItems] = useState(() =>
     getArrayItem(storageKeys.userItems)
   );
@@ -33,15 +34,27 @@ const ItemsProvider = ({ children }) => {
   );
 
   const resetLoadingState = useCallback(() => setLoading(false), []);
-  //spoofed delay to show my cute loader :)
-  const resetLoadingStateAfterDelay = useTimeoutAction(resetLoadingState, 1000);
+  const resetLoadingIdState = useCallback((loadingId, afterLoad) => {
+    setLoadingItemIds((current) => current.filter((id) => id !== loadingId));
+    afterLoad?.();
+  }, []);
+  //spoofed delays to show my cute loader :)
+  const loaderTime = getLoaderDisplayTime();
+  const resetLoadingStateAfterDelay = useTimeoutAction(
+    resetLoadingState,
+    loaderTime
+  );
+  const resetLoadingIdsAfterDelay = useTimeoutAction(
+    resetLoadingIdState,
+    loaderTime
+  );
 
   const fetchRemoteItems = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(backendRoutes.items);
       const data = await response.json();
-      setLoading(false);
+      resetLoadingStateAfterDelay();
       return data?.items ?? [];
     } catch (error) {
       setLoading(false);
@@ -49,7 +62,7 @@ const ItemsProvider = ({ children }) => {
         `${error?.message || 'Error'}: ${error || '(details unknown)'}`
       );
     }
-  }, []);
+  }, [resetLoadingStateAfterDelay]);
 
   useEffect(() => {
     //pull remote items if needed
@@ -66,12 +79,14 @@ const ItemsProvider = ({ children }) => {
     const NewItem = new Item();
     NewItem.id = crypto.randomUUID();
     NewItem.author = userName;
+    NewItem.unsaved = true; //temporary flag
     setUserItems((current) => [NewItem, ...current]);
     setAllItems((current) => [NewItem, ...current]);
   }, [userName]);
 
   const saveItem = useCallback(
     (newItem) => {
+      newItem.unsaved = false; //toggle temporary flag;
       setLoadingItemIds((current) => [...current, newItem.id]);
       const newUserItems = userItems.map(setItemAttributes(newItem));
       const newAllItems = allItems.map(setItemAttributes(newItem));
@@ -79,25 +94,27 @@ const ItemsProvider = ({ children }) => {
       setAllItems(newAllItems);
       setArrayItem(storageKeys.userItems, newUserItems);
       setArrayItem(storageKeys.allItems, newAllItems);
-      setLoadingItemIds((current) => current.filter((id) => id !== newItem.id));
+      delete newItem.unsaved; //delete temporary flag
+      resetLoadingIdsAfterDelay(newItem.id);
     },
-    [allItems, userItems]
+    [allItems, resetLoadingIdsAfterDelay, userItems]
   );
 
   const removeItem = useCallback(
-    (targetItem) => {
-      setLoadingItemIds((current) => [...current, targetItem.id]);
-      const newUserItems = userItems.filter(filterOutTarget(targetItem.id));
-      const newAllItems = allItems.filter(filterOutTarget(targetItem.id));
-      setUserItems(newUserItems);
-      setAllItems(newAllItems);
-      setArrayItem(storageKeys.userItems, newUserItems);
-      setArrayItem(storageKeys.allItems, newAllItems);
-      setLoadingItemIds((current) =>
-        current.filter((id) => id !== targetItem.id)
-      );
+    (targetItemId) => {
+      if (!targetItemId) return;
+      setLoadingItemIds((current) => [...current, targetItemId]);
+      const newUserItems = userItems.filter(filterOutTarget(targetItemId));
+      const newAllItems = allItems.filter(filterOutTarget(targetItemId));
+      const handleDeleteAfterLoad = () => {
+        setUserItems(newUserItems);
+        setAllItems(newAllItems);
+        setArrayItem(storageKeys.userItems, newUserItems);
+        setArrayItem(storageKeys.allItems, newAllItems);
+      };
+      resetLoadingIdsAfterDelay(targetItemId, handleDeleteAfterLoad);
     },
-    [allItems, userItems]
+    [allItems, resetLoadingIdsAfterDelay, userItems]
   );
 
   return (

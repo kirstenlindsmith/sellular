@@ -1,5 +1,9 @@
 import { colors } from '../constants';
 
+const randomNumber = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+export const getLoaderDisplayTime = () => randomNumber(500, 1200);
+
 export const getUserFontSize = () => {
   const localFontSize = parseFloat(
     getComputedStyle(document?.documentElement)?.fontSize
@@ -71,3 +75,22 @@ export const changeHexColor = (color, percent) => {
 };
 
 export const interactColor = (color) => changeHexColor(color, -10);
+
+const shouldUseBlackText = (color = colors.teal) => {
+  let workingColor = color;
+  if (color.slice(0, 6) === 'var(--') {
+    workingColor = colors[color.slice(6, color.length - 1)];
+  }
+
+  if (
+    !workingColor ||
+    workingColor === colors.white ||
+    workingColor === 'transparent'
+  )
+    return true;
+
+  return findHexBrightness(workingColor) > 190;
+};
+
+export const bestTextColor = (color = colors.teal) =>
+  shouldUseBlackText(color) ? colors.black : colors.white;

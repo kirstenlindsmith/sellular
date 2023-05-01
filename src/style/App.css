@@ -1,3 +1,22 @@
+.row {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blur {
+  filter: blur(6px);
+}
+
 #skip-to-main {
   top: -100rem;
 }
@@ -51,9 +70,15 @@
 }
 
 .input-and-label {
+  position: relative;
   display: flex;
   flex-direction: column-reverse;
   gap: 0.25rem;
+  width: 100%;
+}
+
+.input-section .full-width {
+  width: 100%;
 }
 
 .input-section label {
@@ -69,11 +94,17 @@
 }
 
 .input-section input {
+  width: 100%;
   border-radius: 4px;
   outline: 1px solid var(--black);
   border: none;
   padding: 0.5rem;
   background-color: var(--white);
+}
+
+.icon-and-input {
+  display: flex;
+  align-items: center;
 }
 
 .field-error label {
