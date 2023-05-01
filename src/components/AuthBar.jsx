@@ -10,6 +10,7 @@ const authBarStyles = {
   padding: '1rem 2rem',
   position: 'fixed',
   top: 0,
+  zIndex: 1000,
 };
 
 const authStyles = {

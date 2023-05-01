@@ -9,6 +9,7 @@ import {
 import Button from '../../../Button';
 import PageLoader from '../../../PageLoader';
 import PlusIcon from '../../../../assets/PlusIcon';
+import SingleItem from './SingleItem';
 
 const ItemsList = () => {
   const { addItem, allItems, loading } = useItems();
@@ -34,31 +35,21 @@ const ItemsList = () => {
       noItems ? (
         <p>No products are currently available.</p>
       ) : (
-        groupedItems.map((group, groupIndex) => (
+        groupedItems.map((group) => (
           <div
             key={`item-group-${Math.random()}`}
-            id={`item-group-${groupIndex}`}
             className='item-group'
             style={listStyles}
           >
-            {(group ?? []).map((item, itemIndex) => {
+            {(group ?? []).map((item) => {
               const isPlaceholder = item === 'placeholder';
               return isPlaceholder ? (
                 <div
                   key={Math.random()}
-                  id={`item-${groupIndex}-${itemIndex}`}
                   className='single-item placeholder-item'
                 />
               ) : (
-                <div
-                  key={item.id}
-                  id={`item-${groupIndex}-${itemIndex}`}
-                  className='single-item'
-                >
-                  {item.title || 'item'}
-                  <br />
-                  {item.id || 'id'}
-                </div>
+                <SingleItem key={item.id} {...item} />
               );
             })}
           </div>
@@ -69,12 +60,12 @@ const ItemsList = () => {
 
   return (
     <div>
-      <div className='header-row' ref={componentRef} style={headerStyles}>
+      <main className='header-row' ref={componentRef} style={headerStyles}>
         <h1>All products</h1>
         <Button size='small' onClick={addItem}>
           <PlusIcon color={colors.white} size={'1rem'} /> Add
         </Button>
-      </div>
+      </main>
       <div className='items-list' ref={containerRef}>
         {loading ? (
           <PageLoader style={{ backgroundColor: colors.white }} />

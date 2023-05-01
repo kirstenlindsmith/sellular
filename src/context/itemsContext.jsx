@@ -12,6 +12,7 @@ import Item from '../models/Item';
 const initialValue = {
   userItems: [],
   allItems: [],
+  loadingItemIds: [],
   loading: false,
   addItem: () => undefined,
   saveItem: () => undefined,
@@ -23,6 +24,7 @@ export const ItemsContext = createContext(initialValue);
 const ItemsProvider = ({ children }) => {
   const { userName } = useUser();
   const [loading, setLoading] = useState(false);
+  const [loadingItemIds, setLoadingItemIds] = useState(false);
   const [userItems, setUserItems] = useState(() =>
     getArrayItem(storageKeys.userItems)
   );
@@ -66,42 +68,36 @@ const ItemsProvider = ({ children }) => {
     NewItem.author = userName;
     setUserItems((current) => [NewItem, ...current]);
     setAllItems((current) => [NewItem, ...current]);
-    setArrayItem(storageKeys.userItems, [
-      NewItem,
-      ...getArrayItem(storageKeys.userItems),
-    ]);
-    setArrayItem(storageKeys.allItems, [
-      NewItem,
-      ...getArrayItem(storageKeys.allItems),
-    ]);
   }, [userName]);
 
   const saveItem = useCallback(
     (newItem) => {
-      setLoading(true);
+      setLoadingItemIds((current) => [...current, newItem.id]);
       const newUserItems = userItems.map(setItemAttributes(newItem));
       const newAllItems = allItems.map(setItemAttributes(newItem));
       setUserItems(newUserItems);
       setAllItems(newAllItems);
       setArrayItem(storageKeys.userItems, newUserItems);
       setArrayItem(storageKeys.allItems, newAllItems);
-      resetLoadingStateAfterDelay();
+      setLoadingItemIds((current) => current.filter((id) => id !== newItem.id));
     },
-    [allItems, resetLoadingStateAfterDelay, userItems]
+    [allItems, userItems]
   );
 
   const removeItem = useCallback(
     (targetItem) => {
-      setLoading(true);
+      setLoadingItemIds((current) => [...current, targetItem.id]);
       const newUserItems = userItems.filter(filterOutTarget(targetItem.id));
       const newAllItems = allItems.filter(filterOutTarget(targetItem.id));
       setUserItems(newUserItems);
       setAllItems(newAllItems);
       setArrayItem(storageKeys.userItems, newUserItems);
       setArrayItem(storageKeys.allItems, newAllItems);
-      resetLoadingStateAfterDelay();
+      setLoadingItemIds((current) =>
+        current.filter((id) => id !== targetItem.id)
+      );
     },
-    [allItems, resetLoadingStateAfterDelay, userItems]
+    [allItems, userItems]
   );
 
   return (
@@ -110,6 +106,7 @@ const ItemsProvider = ({ children }) => {
         userItems,
         allItems,
         loading,
+        loadingItemIds,
         addItem,
         saveItem,
         removeItem,
