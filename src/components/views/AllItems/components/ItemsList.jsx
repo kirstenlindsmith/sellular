@@ -10,6 +10,7 @@ import Button from '../../../Button';
 import PageLoader from '../../../PageLoader';
 import PlusIcon from '../../../../assets/PlusIcon';
 import SingleItem from './SingleItem';
+import SingleItemProvider from '../../../../context/singleItemContext';
 
 const ItemsList = () => {
   const { addItem, allItems, loading } = useItems();
@@ -49,7 +50,9 @@ const ItemsList = () => {
                   className='single-item placeholder-item'
                 />
               ) : (
-                <SingleItem key={item.id} {...item} />
+                <SingleItemProvider key={item.id} item={item}>
+                  <SingleItem />
+                </SingleItemProvider>
               );
             })}
           </div>
