@@ -1,12 +1,25 @@
+import { useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
-import Link from '../../Link';
+import { navigate } from '../../../helpers';
+import { useUser } from '../../../hooks';
+import sharedStyles from '../../../style/shared.styles';
 
 const SignOut = () => {
+  const { setLoading, signedIn, signOut } = useUser();
+
+  useEffect(() => {
+    if (!signedIn) navigate(frontendRoutes.signIn);
+    else {
+      setLoading(true);
+      signOut();
+    }
+  }, [setLoading, signOut, signedIn]);
+
   return (
-    <>
-      <div>SignOut</div>
-      <Link href={frontendRoutes.signIn}>SignIn</Link>
-    </>
+    <div
+      className='centered-page'
+      style={sharedStyles.pageConlightBluePagetainer}
+    />
   );
 };
 

@@ -1,11 +1,19 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { frontendRoutes, storageKeys } from '../constants';
-import { getItem, navigate, setItem } from '../helpers';
+import {
+  getItem,
+  getLoaderDisplayTime,
+  navigate,
+  removeItem,
+  setItem,
+} from '../helpers';
+import { useTimeoutAction } from '../hooks';
 
 const initialValue = {
-  loading: false,
-  signedIn: false,
   userName: '',
+  signedIn: false,
+  loading: false,
+  setLoading: () => undefined,
   signIn: () => undefined,
   signOut: () => undefined,
 };
@@ -16,31 +24,47 @@ const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState(() => getItem(storageKeys.userName));
 
+  const resetLoadingState = useCallback(() => setLoading(false), []);
+  //spoofed delay to show my cute loader :)
+  const loaderTime = getLoaderDisplayTime();
+  const resetLoadingStateAfterDelay = useTimeoutAction(
+    resetLoadingState,
+    loaderTime
+  );
+
   useEffect(() => {
     if (!userName) {
-      setLoading(true);
       const storedUser = getItem(storageKeys.userName);
       !!storedUser && setUserName(storedUser);
-      setLoading(false);
     }
-  }, [userName]);
+    resetLoadingStateAfterDelay();
+  }, [resetLoadingStateAfterDelay, userName]);
 
-  const signIn = useCallback((newUserName) => {
-    setUserName(newUserName);
-    setItem(storageKeys.userName, newUserName);
-    navigate(frontendRoutes.home);
-  }, []);
+  const signIn = useCallback(
+    (newUserName) => {
+      setLoading(true);
+      setUserName(newUserName);
+      setItem(storageKeys.userName, newUserName);
+      navigate(frontendRoutes.home);
+      resetLoadingStateAfterDelay();
+    },
+    [resetLoadingStateAfterDelay]
+  );
 
   const signOut = useCallback(() => {
-    navigate(frontendRoutes.signOut);
-  }, []);
+    setUserName('');
+    removeItem(storageKeys.userName);
+    navigate(frontendRoutes.signIn);
+    resetLoadingStateAfterDelay();
+  }, [resetLoadingStateAfterDelay]);
 
   return (
     <UserContext.Provider
       value={{
-        loading,
-        signedIn: !!userName,
         userName,
+        signedIn: !!userName,
+        loading,
+        setLoading,
         signIn,
         signOut,
       }}

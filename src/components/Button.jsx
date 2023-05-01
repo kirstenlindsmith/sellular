@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import { colors } from '../constants';
-import { interactColor } from '../helpers';
+import { bestTextColor, interactColor } from '../helpers';
 
 const buttonSizes = {
   small: {
     fontSize: '0.813rem',
-    fontWeight: 500,
+    fontWeight: 550,
     minHeight: 'none',
   },
   medium: {
@@ -20,7 +20,7 @@ const buttonSizes = {
   },
 };
 
-const buttonStyles = (color, size, disabled, fullWidth) => ({
+const buttonStyles = (color, textColor, size, disabled, fullWidth) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -28,9 +28,10 @@ const buttonStyles = (color, size, disabled, fullWidth) => ({
   borderRadius: '6px',
   padding: '0.25rem 0.5rem',
   opacity: disabled ? 0.4 : 1,
-  backgroundColor: color ?? colors.teal,
-  color: colors.white,
+  backgroundColor: color,
+  color: textColor ?? bestTextColor(color),
   width: fullWidth ? '100%' : 'auto',
+  height: 'fit-content',
   letterSpacing: '0.01rem',
   minHeight: buttonSizes[size].minHeight ?? buttonSizes.medium.minHeight,
   fontWeight: buttonSizes[size].fontWeight ?? buttonSizes.medium.fontWeight,
@@ -40,11 +41,16 @@ const buttonStyles = (color, size, disabled, fullWidth) => ({
 const hiddenOnLoadStyle = (loading) => ({
   opacity: loading ? 0 : 1,
   visibility: loading ? 'hidden' : 'visible',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '0.25rem',
 });
 
 const Button = ({
   children,
   color = colors.teal,
+  textColor,
   size = 'medium',
   fullWidth,
   style,
@@ -57,10 +63,10 @@ const Button = ({
 
   const currentStyle = useMemo(
     () => ({
-      ...buttonStyles(currentColor, size, disabled, fullWidth),
+      ...buttonStyles(currentColor, textColor, size, disabled, fullWidth),
       ...(style ?? {}),
     }),
-    [currentColor, disabled, fullWidth, size, style]
+    [currentColor, disabled, fullWidth, size, style, textColor]
   );
 
   const handleInteract = useCallback(
@@ -72,26 +78,22 @@ const Button = ({
     [color]
   );
 
-  const handleClick = useCallback(
-    (e) => {
-      e?.preventDefault();
-      onClick?.(e);
-    },
-    [onClick]
-  );
-
   return (
     <button
       aria-disabled={disabled}
       disabled={disabled || loading}
-      onClick={handleClick}
+      onClick={props.type === 'submit' ? undefined : onClick}
       style={currentStyle}
       onMouseOver={handleInteract('in')}
       onMouseOut={handleInteract('out')}
       {...props}
     >
       {loading && 'Loading...'}
-      <div style={hiddenOnLoadStyle(loading)} aria-hidden={loading}>
+      <div
+        className='button-content'
+        style={hiddenOnLoadStyle(loading)}
+        aria-hidden={loading}
+      >
         {children}
       </div>
     </button>

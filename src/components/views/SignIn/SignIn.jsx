@@ -2,9 +2,10 @@ import { useCallback, useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
 import { navigate, validateStringLength } from '../../../helpers';
 import { useTextInputState, useUser } from '../../../hooks';
-import Input from '../../Input';
-import styles from './SignIn.styles';
 import Button from '../../Button';
+import Input from '../../Input';
+import sharedStyles from '../../../style/shared.styles';
+import './SignIn.css';
 
 const SignIn = () => {
   const { signedIn, signIn } = useUser();
@@ -17,25 +18,29 @@ const SignIn = () => {
     if (signedIn) navigate(frontendRoutes.home);
   }, [signedIn]);
 
-  const handleSignIn = useCallback(() => {
-    if (name.valid) signIn(name.value);
-    else name.forceError();
-  }, [name, signIn]);
+  const handleSignIn = useCallback(
+    (e) => {
+      e?.preventDefault();
+      if (name.valid) signIn(name.value);
+      else name.forceError();
+    },
+    [name, signIn]
+  );
 
   return (
-    <div className='centered-page' style={styles.root}>
-      <div style={styles.content}>
-        <h1 style={styles.header}>What's your name?</h1>
+    <div className='centered-page sign-in' style={sharedStyles.lightBluePage}>
+      <form onSubmit={handleSignIn}>
+        <h1>Welcome</h1>
         <Input
           name='name'
           label='Name'
           placeholder='Enter your name'
           fieldHandler={name}
         />
-        <Button fullWidth onClick={handleSignIn}>
+        <Button fullWidth type='submit'>
           Sign in
         </Button>
-      </div>
+      </form>
     </div>
   );
 };

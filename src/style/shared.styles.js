@@ -1,7 +1,7 @@
 import { colors, opacity } from '../constants';
 import { addHexOpacity } from '../helpers';
 
-const sharedStyles = {
+const core = {
   row: {
     display: 'flex',
     flexDirection: 'row',
@@ -17,9 +17,13 @@ const sharedStyles = {
   },
 };
 
-export default sharedStyles;
-
-export const pageContainerStyles = {
-  ...sharedStyles.column,
+const lightBluePage = {
+  ...core.column,
   backgroundColor: addHexOpacity(colors.teal, opacity.light),
 };
+
+const sharedStyles = {
+  ...core,
+  lightBluePage,
+};
+export default sharedStyles;
