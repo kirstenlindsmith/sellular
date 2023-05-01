@@ -5,6 +5,7 @@ const Input = ({
   label,
   fieldHandler,
   fullWidth,
+  multiline,
   onBlur,
   onChange,
   onFocus,
@@ -31,6 +32,11 @@ const Input = ({
     [fieldHandler, onChange]
   );
 
+  const InputComponent = useCallback(
+    (props) => (multiline ? <textarea {...props} /> : <input {...props} />),
+    [multiline]
+  );
+
   return (
     <div
       className={`input-section ${
@@ -40,7 +46,7 @@ const Input = ({
       <div className='icon-and-input'>
         {startIcon ?? null}
         <div className={`input-and-label ${fullWidth ? 'full-width' : ''}`}>
-          <input
+          <InputComponent
             name={name}
             value={fieldHandler.value}
             onFocus={handleFocus}

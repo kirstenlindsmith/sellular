@@ -67,7 +67,17 @@
 }
 
 .item-details .listing-info-row {
-  height: 3.063rem;
+  margin-bottom: 1.125rem;
+  height: 1.938rem;
+}
+
+.item-details .listing-info-row.edit-mode {
+  margin-bottom: 0;
+  height: auto;
+}
+
+.single-item .edit-button {
+  border: 1px solid var(--teal) !important;
 }
 
 .single-item .image-container {
@@ -95,7 +105,6 @@
 .single-item .title {
   font-size: 1.25rem;
   font-weight: 550;
-  margin-bottom: 1.125rem;
 }
 
 .single-item .price {
@@ -107,12 +116,12 @@
   padding-top: 0.15rem;
 }
 
-.single-item .description {
-  margin-top: 1rem;
+.single-item .description:not(.edit-mode) {
+  margin-top: 1.5rem;
 }
 
-.single-item .edit-mode-description {
-  padding-top: 2rem;
+.single-item .description.edit-mode {
+  margin-top: 1.75rem;
   margin-bottom: -1.75rem;
 }
 
@@ -122,11 +131,6 @@
 
 .single-item .author {
   font-weight: 550;
-}
-
-.single-item .edit-button {
-  border: 1px solid var(--teal) !important;
-  margin-left: 0.5rem;
 }
 
 .single-item .input-and-label label {
@@ -145,9 +149,10 @@
 
 .image-container .image-input {
   position: absolute !important;
-  width: 100%;
+  width: calc(100% - 2px);
   padding: 1rem 0;
   top: calc(50% - 3.75rem);
+  left: 1px;
 }
 
 .image-container .input-section {
@@ -172,12 +177,12 @@
 }
 
 .single-item .save-delete-buttons {
-  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-.single-item .save-delete-buttons button {
-  flex: 1;
+.single-item .save-button .button-content {
+  gap: 0.33rem !important;
 }

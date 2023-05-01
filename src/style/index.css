@@ -17,7 +17,6 @@
 
 html {
   min-height: 100%;
-  font-family: Tahoma, Verdana, sans-serif;
 }
 
 body,
@@ -30,6 +29,7 @@ body,
 
 * {
   box-sizing: border-box;
+  font-family: Tahoma, Verdana, sans-serif;
 }
 
 a {
@@ -56,4 +56,9 @@ link {
 h1,
 p {
   margin: 0;
+}
+
+input,
+textarea {
+  font-size: 1rem;
 }

@@ -34,7 +34,7 @@ const SignIn = () => {
         <Input
           name='name'
           label='Name'
-          placeholder='Enter your name'
+          placeholder='Enter your name (case sensitive)'
           fieldHandler={name}
         />
         <Button fullWidth type='submit'>

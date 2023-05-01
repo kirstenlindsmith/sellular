@@ -8,9 +8,11 @@ import {
   validateDollarField,
   validateStringLength,
 } from '../../../../../helpers';
-import { useItems, useTextInputState } from '../../../../../hooks';
-import EditIcon from '../../../../../assets/EditIcon';
+import { useItems, useTextInputState, useUser } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
+import DeleteIcon from '../../../../../assets/DeleteIcon';
+import EditIcon from '../../../../../assets/EditIcon';
+import SaveIcon from '../../../../../assets/SaveIcon';
 import Button from '../../../../Button';
 import Input from '../../../../Input';
 import PageLoader from '../../../../PageLoader';
@@ -26,7 +28,8 @@ const SingleItem = ({
   image,
   unsaved, //temporary flag, only exists on new user items
 }) => {
-  const { removeItem, saveItem, loadingItemIds, userItems } = useItems();
+  const { userName } = useUser();
+  const { removeItem, saveItem, loadingItemIds, allItems } = useItems();
   const loading = useMemo(
     () => loadingItemIds.includes(id),
     [id, loadingItemIds]
@@ -56,8 +59,10 @@ const SingleItem = ({
   });
 
   const isUserItem = useMemo(
-    () => !!unsaved || userItems.some((item) => item.id === id),
-    [id, unsaved, userItems]
+    () =>
+      !!unsaved ||
+      allItems.some((item) => item.author === userName && item.id === id),
+    [unsaved, allItems, userName, id]
   );
 
   //center the square-cropped product image
@@ -121,7 +126,11 @@ const SingleItem = ({
       ) : (
         <>
           <div className='item-details'>
-            <div className='listing-info-row'>
+            <div
+              className={`listing-info-row ${
+                editModeActive ? 'edit-mode' : ''
+              }`}
+            >
               <div className='row'>
                 {editModeActive ? (
                   <Input
@@ -132,18 +141,6 @@ const SingleItem = ({
                   />
                 ) : (
                   <p className='title'>{title || 'Untitled product'}</p>
-                )}
-                {isUserItem && !editModeActive && (
-                  <Button
-                    size='small'
-                    className='edit-button'
-                    color={colors.white}
-                    textColor={colors.teal}
-                    onClick={enableEditMode}
-                  >
-                    <EditIcon size='1rem' color={colors.teal} />
-                    Edit
-                  </Button>
                 )}
               </div>
               {editModeActive ? (
@@ -187,9 +184,11 @@ const SingleItem = ({
               />
             </div>
             {editModeActive ? (
-              <div className='edit-mode-description'>
+              <div className='description edit-mode'>
                 <Input
                   fullWidth
+                  multiline
+                  rows='5'
                   name='description'
                   label='Product description'
                   placeholder='About this product'
@@ -201,12 +200,26 @@ const SingleItem = ({
             )}
           </div>
           <div className='item-footer'>
+            {isUserItem && !editModeActive && (
+              <Button
+                fullWidth
+                className='edit-button'
+                color={colors.white}
+                textColor={colors.teal}
+                onClick={enableEditMode}
+              >
+                <EditIcon size='1rem' color={colors.teal} />
+                Edit
+              </Button>
+            )}
             {editModeActive && (
               <div className='save-delete-buttons'>
-                <Button fullWidth onClick={handleSave}>
+                <Button fullWidth onClick={handleSave} className='save-button'>
+                  <SaveIcon size='1rem' color={colors.white} />
                   Save
                 </Button>
                 <Button fullWidth onClick={handleDelete} color={colors.red}>
+                  <DeleteIcon size='1rem' color={colors.white} />
                   Delete
                 </Button>
               </div>

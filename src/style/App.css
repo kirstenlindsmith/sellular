@@ -85,21 +85,28 @@
   font-size: 0.875rem;
 }
 
-.input-section input:focus + label {
+.input-section input:focus + label,
+.input-section textarea:focus + label {
   color: var(--teal);
 }
 
-.input-section input:focus {
+.input-section input:focus,
+.input-section textarea:focus {
   outline: 2px solid var(--teal);
 }
 
-.input-section input {
+.input-section input,
+.input-section textarea {
   width: 100%;
   border-radius: 4px;
   outline: 1px solid var(--black);
   border: none;
   padding: 0.5rem;
   background-color: var(--white);
+}
+
+.input-section textarea {
+  padding: 0.25rem 0.5rem;
 }
 
 .icon-and-input {
@@ -111,11 +118,13 @@
   color: var(--red) !important;
 }
 
-.field-error input {
+.field-error input,
+.field-error textarea {
   outline: 1px solid var(--red) !important;
 }
 
-.field-error input:focus {
+.field-error input:focus,
+.field-error textarea:focus {
   outline-width: 2px !important;
 }
 
