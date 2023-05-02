@@ -9,12 +9,12 @@ import Button from './shared/Button';
 
 const authBarStyles = {
   ...sharedStyles.row,
-  justifyContent: 'space-between',
-  width: '100%',
-  padding: '1rem 2rem',
   position: 'absolute',
   top: 0,
   zIndex: 1000,
+  width: '100%',
+  padding: '1rem 2rem',
+  justifyContent: 'space-between',
 };
 
 const authStyles = {

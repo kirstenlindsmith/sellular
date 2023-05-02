@@ -19,7 +19,7 @@ const core = {
 
 const lightBluePage = {
   ...core.column,
-  backgroundColor: addHexOpacity(colors.teal, opacity.light),
+  // backgroundColor: addHexOpacity(colors.teal, opacity.light),
 };
 
 const sharedStyles = {

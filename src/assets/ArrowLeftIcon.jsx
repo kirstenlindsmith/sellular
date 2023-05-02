@@ -3,8 +3,8 @@ import { colors } from '../constants';
 const ArrowLeftIcon = ({ color, size, ...rest }) => (
   <svg
     fill={color || colors.black}
-    width={size || '800px'}
-    height={size || '800px'}
+    width={size || '1em'}
+    height={size || '1em'}
     viewBox='0 0 1024 1024'
     xmlns='http://www.w3.org/2000/svg'
     {...rest}

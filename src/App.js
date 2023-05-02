@@ -15,7 +15,7 @@ function App() {
       <UserProvider>
         <ItemsProvider>
           <SkipToMainContent />
-          <div>
+          <div style={{ position: 'relative' }}>
             <AuthBar />
             <Router />
           </div>

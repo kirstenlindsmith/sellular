@@ -46,11 +46,10 @@
 
 .standard-page {
   width: 100%;
-  height: var(--document-height);
+  min-height: var(--document-height);
   display: flex;
   flex-direction: column;
   padding: 5rem 2rem 2rem;
-  overflow: auto;
 }
 
 .fixed-page {
@@ -162,4 +161,33 @@
 
 .field-error .helper-text {
   color: var(--red);
+}
+
+[role='tooltip'] {
+  width: auto;
+  height: auto;
+  max-width: max-content;
+  white-space: pre-line;
+  min-height: 1.5rem;
+  line-height: 1.5rem;
+  font-size: 0.875rem !important;
+  font-weight: normal;
+  background-color: rgba(51, 51, 51, 0.8);
+  color: var(--white) !important;
+  border-radius: 5px;
+  padding: 0.25rem 0.75rem;
+  position: absolute;
+  z-index: 10000;
+  /* top: -50%; */
+  transform: translateX(-50%);
+  /* opacity: 0; */
+}
+
+[role='tooltip'].active {
+  opacity: 1;
+  transition: opacity 0.1s ease;
+}
+
+[data-tooltip] {
+  position: relative;
 }

@@ -1,6 +1,15 @@
+import { useEffect, useMemo, useState } from 'react';
 import { colors } from '../../../../../constants';
-import { formatStringToDollars, formatTimestamp } from '../../../../../helpers';
-import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
+import {
+  formatStringToDollars,
+  formatTimestamp,
+  handleTooltips,
+} from '../../../../../helpers';
+import {
+  useOverflowWatcher,
+  useSingleItem,
+  useTooltips,
+} from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
 import Input from '../../../../shared/Input';
@@ -29,6 +38,26 @@ const SingleItem = () => {
       price,
     },
   } = useSingleItem();
+  const { componentRef: titleRef, overflows: titleOverflows } =
+    useOverflowWatcher(title);
+
+  const [tooltipData, setTooltipData] = useState(() =>
+    titleOverflows ? title : undefined
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setTooltipData(titleOverflows ? title : undefined);
+    };
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [title, titleOverflows]);
+
+  useEffect(() => {
+    handleTooltips();
+  }, [tooltipData]);
 
   return (
     <Card className='single-item'>
@@ -51,14 +80,20 @@ const SingleItem = () => {
                     fieldHandler={itemTitle}
                   />
                 ) : (
-                  <Link
-                    title='View product'
-                    aria-label={`${title || 'Untitled product'}: click to view`}
-                    className='title'
-                    onClick={handleViewItem}
-                  >
-                    {title || 'Untitled product'}
-                  </Link>
+                  <div data-tooltip={tooltipData} className='title-container'>
+                    <Link
+                      ref={titleRef}
+                      title='View product'
+                      aria-label={`${
+                        title || 'Untitled product'
+                      }: click to view`}
+                      className='title'
+                      onClick={handleViewItem}
+                      // data-tooltip={tooltipData}
+                    >
+                      {title || 'Untitled product'}
+                    </Link>
+                  </div>
                 )}
               </>
               {editModeActive ? (

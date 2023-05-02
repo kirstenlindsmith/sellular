@@ -9,4 +9,5 @@ export * from './useSingleItem';
 export * from './useTextInputState';
 export * from './useTimeoutAction';
 export * from './useTimeoutEffect';
+export * from './useTooltips';
 export * from './useUser';
