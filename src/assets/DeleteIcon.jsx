@@ -2,8 +2,8 @@ import { colors } from '../constants';
 
 const DeleteIcon = ({ color, size, ...rest }) => (
   <svg
-    width={size || '1em'}
-    height={size || '1em'}
+    width={size || '1rem'}
+    height={size || '1rem'}
     viewBox='0 0 24 24'
     fill='none'
     xmlns='http://www.w3.org/2000/svg'

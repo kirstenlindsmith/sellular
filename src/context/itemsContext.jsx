@@ -35,7 +35,9 @@ const ItemsProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [loadingItemIds, setLoadingItemIds] = useState([]);
   const [userItems, setUserItems] = useState(() =>
-    getArrayItem(storageKeys.userItems)
+    getArrayItem(storageKeys.userItems).filter(
+      (item) => item.author === userName
+    )
   );
   const [allItems, setAllItems] = useState(() =>
     getArrayItem(storageKeys.allItems)

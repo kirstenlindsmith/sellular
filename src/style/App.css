@@ -17,6 +17,12 @@
   filter: blur(6px);
 }
 
+.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  cursor: default !important;
+}
+
 #skip-to-main {
   top: -100rem;
 }

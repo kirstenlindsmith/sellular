@@ -5,11 +5,10 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { defaultTextInputState, frontendRoutes } from '../constants';
+import { defaultTextInputState } from '../constants';
 import {
   formatNumberToToDecimalString,
   formatStringToDecimalNumber,
-  navigate,
   validateDollarField,
   validateStringLength,
 } from '../helpers';
@@ -29,7 +28,6 @@ const initialValue = {
   handleEdit: () => undefined,
   handleSave: () => undefined,
   handleDelete: () => undefined,
-  handleViewItem: () => undefined,
 };
 
 export const SingleItemContext = createContext(initialValue);
@@ -120,11 +118,6 @@ const SingleItemProvider = ({ children, item }) => {
     return () => window.removeEventListener('resize', getImageStyles());
   }, [id]);
 
-  const handleViewItem = useCallback(
-    () => navigate(`${frontendRoutes.item}/${id}`),
-    [id]
-  );
-
   const handleEdit = useCallback(() => setEditModeActive(true), []);
 
   const handleSave = useCallback(
@@ -183,7 +176,6 @@ const SingleItemProvider = ({ children, item }) => {
         handleEdit,
         handleSave,
         handleDelete,
-        handleViewItem,
       }}
     >
       {children}

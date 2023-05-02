@@ -95,18 +95,18 @@ const ItemDetail = () => {
             onClick={handleEdit}
             className={editModeActive ? 'edit-mode' : ''}
           >
-            <EditIcon size='1rem' color={colors.white} />
+            <EditIcon color={colors.white} />
             Edit
           </Button>
         )}
         {showSaveDeleteButtons && (
           <div className='save-delete-buttons'>
             <Button onClick={handleSave}>
-              <SaveIcon size='1rem' color={colors.white} />
+              <SaveIcon color={colors.white} />
               Save
             </Button>
             <Button onClick={handleDelete} color={colors.red}>
-              <DeleteIcon size='1rem' color={colors.white} />
+              <DeleteIcon color={colors.white} />
               Delete
             </Button>
           </div>

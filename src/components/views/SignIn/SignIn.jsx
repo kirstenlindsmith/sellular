@@ -1,6 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
-import { navigate, validateStringLength } from '../../../helpers';
+import {
+  navigate,
+  normalizeName,
+  validateStringLength,
+} from '../../../helpers';
 import { useTextInputState, useUser } from '../../../hooks';
 import Button from '../../shared/Button';
 import Input from '../../shared/Input';
@@ -10,6 +14,7 @@ const SignIn = () => {
   const { signedIn, signIn } = useUser();
   const name = useTextInputState({
     required: true,
+    normalizer: normalizeName,
     validation: validateStringLength(50, 1),
   });
 

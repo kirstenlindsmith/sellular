@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import { colors } from '../../../../../constants';
-import { formatStringToDollars, formatTimestamp } from '../../../../../helpers';
+import { colors, frontendRoutes } from '../../../../../constants';
+import {
+  formatStringToDollars,
+  formatTimestamp,
+  makeLinkFromName,
+} from '../../../../../helpers';
 import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
@@ -19,7 +23,6 @@ const SingleItem = () => {
     itemPrice,
     itemDescription,
     imageUrl,
-    handleViewItem,
     item: {
       id,
       author,
@@ -71,7 +74,8 @@ const SingleItem = () => {
                   <Link
                     className='title'
                     title={`Click to view ${title}`}
-                    onClick={handleViewItem}
+                    href={`${frontendRoutes.item}/${id}`}
+                    // onClick={handleViewItem}
                     aria-label={`Click to view ${title || 'Untitled product'}`}
                   >
                     {title || 'Untitled product'}
@@ -135,7 +139,17 @@ const SingleItem = () => {
           <div className='item-footer'>
             <ItemActionButtons />
             <div className='listing-info-row submission-info'>
-              <p className='author'>{author || '(Account not found)'}</p>
+              {!!author ? (
+                <Link
+                  href={`${frontendRoutes.userItems}/${makeLinkFromName(
+                    author
+                  )}`}
+                >
+                  <p className='author'>{author || '(Account not found)'}</p>
+                </Link>
+              ) : (
+                <p className='author'>(Account not found)</p>
+              )}
               <p>{formatTimestamp(timestamp ?? postedAt)}</p>
             </div>
           </div>
