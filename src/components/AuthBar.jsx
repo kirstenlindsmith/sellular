@@ -3,12 +3,10 @@ import { colors, frontendRoutes } from '../constants';
 import { usePath, useUser } from '../hooks';
 import ArrowLeftIcon from '../assets/ArrowLeftIcon';
 import Link from './shared/Link';
-import sharedStyles from '../style/shared.styles';
 import { useCallback, useMemo } from 'react';
 import Button from './shared/Button';
 
 const authBarStyles = {
-  ...sharedStyles.row,
   position: 'absolute',
   top: 0,
   zIndex: 1000,
@@ -18,7 +16,6 @@ const authBarStyles = {
 };
 
 const authStyles = {
-  ...sharedStyles.row,
   alignItems: 'flex-start',
   gap: '1rem',
 };
@@ -48,7 +45,7 @@ const AuthBar = () => {
   }, []);
 
   return signedIn ? (
-    <div style={authBarStyles}>
+    <div style={authBarStyles} className='row'>
       <div>
         {showBackButton ? (
           <Button
@@ -60,7 +57,7 @@ const AuthBar = () => {
           </Button>
         ) : null}
       </div>
-      <div style={authStyles}>
+      <div style={authStyles} className='row'>
         <p style={nameStyles}>Hi, {userName || 'friend'}!</p>
         <Link href={frontendRoutes.signOut} style={linkStyle}>
           Sign out

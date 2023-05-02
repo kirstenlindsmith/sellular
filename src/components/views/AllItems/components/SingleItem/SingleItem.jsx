@@ -5,11 +5,7 @@ import {
   formatTimestamp,
   handleTooltips,
 } from '../../../../../helpers';
-import {
-  useOverflowWatcher,
-  useSingleItem,
-  useTooltips,
-} from '../../../../../hooks';
+import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
 import Input from '../../../../shared/Input';

@@ -4,7 +4,6 @@ import { navigate, validateStringLength } from '../../../helpers';
 import { useTextInputState, useUser } from '../../../hooks';
 import Button from '../../shared/Button';
 import Input from '../../shared/Input';
-import sharedStyles from '../../../style/shared.styles';
 import './SignIn.css';
 
 const SignIn = () => {
@@ -28,7 +27,7 @@ const SignIn = () => {
   );
 
   return (
-    <div className='centered-page sign-in' style={sharedStyles.lightBluePage}>
+    <div className='centered-page sign-in'>
       <form onSubmit={handleSignIn}>
         <h1>Welcome</h1>
         <Input

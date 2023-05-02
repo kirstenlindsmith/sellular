@@ -155,13 +155,18 @@ const SingleItemProvider = ({ children, item }) => {
     [id, imageUrl, itemDescription, itemPrice, itemTitle, saveItem]
   );
 
-  const handleDelete = useCallback(() => {
-    //NOTE: `confirm` is a very simple way of doing a fully accessible confirmation dialog
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('Are you sure? A product cannot be recovered once deleted.')) {
-      removeItem(id);
-    }
-  }, [id, removeItem]);
+  const handleDelete = useCallback(
+    (fromDetailPage = false) => {
+      //NOTE: `confirm` is a very simple way of doing a fully accessible confirmation dialog
+      if (
+        // eslint-disable-next-line no-restricted-globals
+        confirm('Are you sure? A product cannot be recovered once deleted.')
+      ) {
+        removeItem(id, fromDetailPage);
+      }
+    },
+    [id, removeItem]
+  );
 
   return (
     <SingleItemContext.Provider

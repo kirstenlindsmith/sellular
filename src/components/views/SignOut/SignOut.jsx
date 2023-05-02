@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
 import { navigate } from '../../../helpers';
 import { useItems, useUser } from '../../../hooks';
-import sharedStyles from '../../../style/shared.styles';
 
 const SignOut = () => {
   const { setLoading, signedIn, signOut } = useUser();
@@ -19,12 +18,7 @@ const SignOut = () => {
     }
   }, [setLoading, setUserItems, signOut, signedIn]);
 
-  return (
-    <div
-      className='centered-page'
-      style={sharedStyles.pageConlightBluePagetainer}
-    />
-  );
+  return <div className='centered-page' />;
 };
 
 export default SignOut;

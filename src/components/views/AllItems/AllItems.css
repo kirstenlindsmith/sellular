@@ -1,18 +1,24 @@
 .items-list {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 1rem;
   padding: 2rem;
   border-radius: 5px;
-  overflow: auto;
+  /* overflow-y: auto; */
   min-height: 13rem;
-  position: fixed;
+  /* position: fixed;
   top: 8rem;
   right: 2rem;
   bottom: 2rem;
-  left: 2rem;
+  left: 2rem; */
   background-color: var(--white);
   box-shadow: var(--box-shadow);
+}
+
+.scroll-container {
+  height: 100%;
+  overflow-y: auto;
 }
 
 .item-group {

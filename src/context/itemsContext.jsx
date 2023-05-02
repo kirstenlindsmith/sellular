@@ -5,11 +5,12 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { backendRoutes, storageKeys } from '../constants';
+import { backendRoutes, frontendRoutes, storageKeys } from '../constants';
 import {
   filterOutTarget,
   getArrayItem,
   getLoaderDisplayTime,
+  navigate,
   setArrayItem,
   setItemAttributes,
 } from '../helpers';
@@ -121,12 +122,13 @@ const ItemsProvider = ({ children }) => {
   );
 
   const removeItem = useCallback(
-    (targetItemId) => {
+    (targetItemId, fromDetailPage = false) => {
       if (!targetItemId) return;
       setLoadingItemIds((current) => [...current, targetItemId]);
       const newUserItems = userItems.filter(filterOutTarget(targetItemId));
       const newAllItems = allItems.filter(filterOutTarget(targetItemId));
       const handleDeleteAfterLoad = () => {
+        if (fromDetailPage) navigate(frontendRoutes.home);
         setUserItems(newUserItems);
         setAllItems(newAllItems);
         setArrayItem(storageKeys.userItems, newUserItems);

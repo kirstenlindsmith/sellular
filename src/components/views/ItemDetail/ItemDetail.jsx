@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { useMemo } from 'react';
 import { breakpoints, colors } from '../../../constants';
 import { useSingleItem } from '../../../hooks';
@@ -8,13 +7,14 @@ import DeleteIcon from '../../../assets/DeleteIcon';
 import EditIcon from '../../../assets/EditIcon';
 import SaveIcon from '../../../assets/SaveIcon';
 import Button from '../../shared/Button';
-import sharedStyles from '../../../style/shared.styles';
 import './ItemDetail.css';
 import { formatStringToDollars, formatTimestamp } from '../../../helpers';
 import Input from '../../shared/Input';
+import PageLoader from '../../PageLoader';
 
 const ItemDetail = () => {
   const {
+    loading,
     isUserItem,
     editModeActive,
     itemTitle,
@@ -46,11 +46,10 @@ const ItemDetail = () => {
     [editModeActive, isUserItem, itemNotFound]
   );
 
-  return (
-    <div
-      className='product-detail standard-page'
-      style={sharedStyles.lightBluePage}
-    >
+  return loading ? (
+    <PageLoader />
+  ) : (
+    <div className='product-detail standard-page'>
       <main className={`header-row ${editModeActive ? 'edit-mode' : ''}`}>
         <h1>
           {editModeActive ? (

@@ -1,26 +1,15 @@
 import { useCallback, useMemo } from 'react';
 import { colors } from '../../../../constants';
 import { makeGroupsOfThree } from '../AllItems.helpers';
-import {
-  useItems,
-  useOverflowWatcher,
-  usePageWrapWatcher,
-} from '../../../../hooks';
-import Button from '../../../shared/Button';
+import { useItems, usePageWrapWatcher } from '../../../../hooks';
 import PageLoader from '../../../PageLoader';
-import PlusIcon from '../../../../assets/PlusIcon';
 import SingleItem from './SingleItem';
 import SingleItemProvider from '../../../../context/singleItemContext';
 
 const ItemsList = () => {
-  const { addItem, allItems, loading } = useItems();
+  const { allItems, loading } = useItems();
   const { pageWraps, containerRef } = usePageWrapWatcher();
-  const { componentRef, overflows: headerOverflows } = useOverflowWatcher();
 
-  const headerStyles = useMemo(
-    () => ({ overflow: headerOverflows ? 'auto' : 'visible' }),
-    [headerOverflows]
-  );
   const listStyles = useMemo(
     () => ({ flexDirection: pageWraps ? 'column' : 'row' }),
     [pageWraps]
@@ -62,14 +51,8 @@ const ItemsList = () => {
   );
 
   return (
-    <div>
-      <main className='header-row' ref={componentRef} style={headerStyles}>
-        <h1>All products</h1>
-        <Button onClick={addItem}>
-          <PlusIcon color={colors.white} size={'1rem'} /> Add
-        </Button>
-      </main>
-      <div className='items-list' ref={containerRef}>
+    <div className='items-list' ref={containerRef}>
+      <div className='scroll-container'>
         {loading ? (
           <PageLoader style={{ backgroundColor: colors.white }} />
         ) : (
