@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { breakpoints, colors } from '../../../constants';
 import { useSingleItem } from '../../../hooks';
 import placeholderImage from '../../../assets/placeholder_image.png';
@@ -34,9 +34,9 @@ const ItemDetail = () => {
       price,
     },
   } = useSingleItem();
+  const [wideImage, setWideImage] = useState(false);
 
   const itemNotFound = useMemo(() => !id, [id]);
-
   const showEditButton = useMemo(
     () => !itemNotFound && isUserItem && !editModeActive,
     [editModeActive, isUserItem, itemNotFound]
@@ -45,6 +45,31 @@ const ItemDetail = () => {
     () => !itemNotFound && isUserItem && editModeActive,
     [editModeActive, isUserItem, itemNotFound]
   );
+  const detailImageStyles = useMemo(
+    () =>
+      wideImage
+        ? { width: 'auto', maxHeight: '35vh' }
+        : { maxWidth: '35vw', height: 'auto' },
+    [wideImage]
+  );
+
+  useEffect(() => {
+    const getImageStyles = () => {
+      const image = document?.getElementById(`${id}-image`);
+      const { height, width } = image?.getBoundingClientRect() ?? {
+        height: 0,
+        width: 0,
+      };
+      const widerThanTall = width > height;
+
+      if (widerThanTall) {
+        setWideImage(true);
+      } else {
+        setWideImage(false);
+      }
+    };
+    getImageStyles();
+  }, [id]);
 
   return loading ? (
     <PageLoader />
@@ -87,10 +112,10 @@ const ItemDetail = () => {
           </div>
         )}
       </main>
-      <div className='row page-content'>
+      <div className={`row page-content ${wideImage ? 'wide-image' : ''}`}>
         <Card
+          fullWidth={wideImage}
           className={`description-card ${editModeActive ? 'edit-mode' : ''}`}
-          width={'45%'}
           fullWidthAtBreakpoint={breakpoints.mobile}
         >
           {editModeActive ? (
@@ -141,12 +166,19 @@ const ItemDetail = () => {
             </div>
           )}
         </Card>
-        <Card fullWidthAtBreakpoint={breakpoints.mobile}>
-          <img
-            id={`${id}-image`}
-            alt={`${title || 'product image'}`}
-            src={imageUrl.value || placeholderImage}
-          />
+        <Card fullWidth={wideImage} fullWidthAtBreakpoint={breakpoints.mobile}>
+          <div
+            className={`product-image-container ${
+              wideImage ? 'wide-image' : ''
+            }`}
+          >
+            <img
+              id={`${id}-image`}
+              alt={`${title || 'product image'}`}
+              src={imageUrl.value || placeholderImage}
+              style={detailImageStyles}
+            />
+          </div>
         </Card>
       </div>
     </div>

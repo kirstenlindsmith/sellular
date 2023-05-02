@@ -5,6 +5,11 @@
 .product-detail .page-content {
   padding-bottom: 2rem;
   gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.product-detail .page-content.wide-image {
+  flex-direction: column;
 }
 
 .product-detail .header-row .input-section {
@@ -49,9 +54,20 @@
   margin-top: 2rem;
 }
 
+.product-detail .product-image-container {
+  min-width: 0 !important;
+  max-width: 50vw;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.product-detail .product-image-container.wide-image {
+  max-width: 100%;
+}
+
 .product-detail img {
-  max-width: 35vw !important;
   border-radius: 5px;
+  max-width: 100%;
 }
 
 @media screen and (max-width: 766px) {

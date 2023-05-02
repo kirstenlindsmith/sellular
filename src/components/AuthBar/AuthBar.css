@@ -1,0 +1,32 @@
+.auth-bar {
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.auth-bar .user-name {
+  font-size: 0.875rem;
+  max-width: 30rem;
+  margin-top: 0.125rem;
+  word-break: break-word;
+}
+
+.auth-bar .sign-out-link {
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 766px) {
+  .auth-bar {
+    padding: 4px 8px;
+  }
+}
