@@ -1,3 +1,5 @@
+import { tooltipDelayMs } from '../constants';
+
 export const remToPixels = (remString = '1rem') => {
   const rem = parseFloat(remString.slice(0, remString.indexOf('rem')));
   if (Number.isNaN(rem)) {
@@ -15,28 +17,40 @@ export const remToPixels = (remString = '1rem') => {
 };
 
 export const handleTooltips = () => {
+  let showTooltipTimer = null;
+
   const showTooltip = (e) => {
-    const trigger = e.target;
-    const tooltip = trigger?.querySelector('[role=tooltip]') ?? {};
-    const { width, height } = trigger?.getBoundingClientRect() ?? {
-      width: 0,
-      height: 0,
-    };
-    const tooltipWidth = tooltip?.getBoundingClientRect()?.width ?? 0;
-    tooltip.style.left = `${Math.floor(width / 2) - tooltipWidth / 2}px`;
-    // tooltip.style.top = `${-remToPixels('1rem')}px`;
-    tooltip.style.top = `${Math.floor(height * 2 + remToPixels('1rem'))}px`;
-    tooltip.classList.add('active');
+    !!showTooltipTimer && clearTimeout(showTooltipTimer);
+    showTooltipTimer = setTimeout(() => {
+      const trigger = e.target;
+      const tooltip = trigger?.querySelector('[role=tooltip]') ?? {};
+      const { width, height } = trigger?.getBoundingClientRect() ?? {
+        width: 0,
+        height: 0,
+      };
+      tooltip.style.left = `${Math.floor(width / 2)}px`;
+      tooltip.style.top = `${Math.floor(height + remToPixels('0.875rem'))}px`;
+      tooltip.classList.add('active');
+    }, tooltipDelayMs);
   };
 
   const hideTooltip = (e) => {
+    !!showTooltipTimer && clearTimeout(showTooltipTimer);
     const tooltip = e.target.querySelector('[role=tooltip]');
     tooltip.classList.remove('active');
   };
 
   const tooltips = document.querySelectorAll('[data-tooltip]') ?? [];
   tooltips.forEach((trigger) => {
-    if (!!trigger?.lastElementChild) return;
+    if (
+      //if a tooltip has already been created, do nothing
+      [...(trigger?.children ?? [])].some((child) => {
+        return child.classList?.contains('tooltip-content');
+      })
+    ) {
+      return;
+    }
+
     //populate tooltips
     const tooltip = document.createElement('div');
     tooltip.setAttribute('role', 'tooltip');

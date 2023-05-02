@@ -38,26 +38,29 @@ const SingleItem = () => {
       price,
     },
   } = useSingleItem();
-  const { componentRef: titleRef, overflows: titleOverflows } =
+  const { componentRef: priceRef, overflows: priceOverflows } =
     useOverflowWatcher(title);
 
-  const [tooltipData, setTooltipData] = useState(() =>
-    titleOverflows ? title : undefined
+  const titleTooltipData = useMemo(() => `Click to view ${title}`, [title]);
+  const [priceTooltipData, setPriceTooltipData] = useState(
+    formatStringToDollars(price)
   );
 
   useEffect(() => {
     const handleResize = () => {
-      setTooltipData(titleOverflows ? title : undefined);
+      setPriceTooltipData(
+        priceOverflows ? formatStringToDollars(price) : undefined
+      );
     };
     handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [title, titleOverflows]);
+  }, [price, priceOverflows]);
 
   useEffect(() => {
     handleTooltips();
-  }, [tooltipData]);
+  }, [priceTooltipData]);
 
   return (
     <Card className='single-item'>
@@ -80,16 +83,16 @@ const SingleItem = () => {
                     fieldHandler={itemTitle}
                   />
                 ) : (
-                  <div data-tooltip={tooltipData} className='title-container'>
+                  <div
+                    className='title-container'
+                    data-tooltip={titleTooltipData}
+                  >
                     <Link
-                      ref={titleRef}
-                      title='View product'
-                      aria-label={`${
+                      aria-label={`Click to view ${
                         title || 'Untitled product'
-                      }: click to view`}
+                      }`}
                       className='title'
                       onClick={handleViewItem}
-                      // data-tooltip={tooltipData}
                     >
                       {title || 'Untitled product'}
                     </Link>
@@ -107,7 +110,14 @@ const SingleItem = () => {
                   />
                 </div>
               ) : (
-                <p className='price'>{formatStringToDollars(price)}</p>
+                <div
+                  className='price-container'
+                  data-tooltip={priceTooltipData}
+                >
+                  <p className='price' ref={priceRef}>
+                    {formatStringToDollars(price)}
+                  </p>
+                </div>
               )}
             </div>
             <div id={`${id}-image-container`} className='image-container'>
