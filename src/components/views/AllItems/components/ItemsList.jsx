@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { breakpoints, colors } from '../../../../constants';
 import { makeRowGroups } from '../../../../helpers';
-import { useItems, usePageWrapWatcher } from '../../../../hooks';
+import { useItems } from '../../../../hooks';
 import PageLoader from '../../../PageLoader';
 import SingleItem from './SingleItem';
 import SingleItemProvider from '../../../../context/singleItemContext';
 
 const ItemsList = () => {
   const { allItems, loading } = useItems();
-  const { pageWraps, containerRef } = usePageWrapWatcher();
 
   const [itemsPerRow, setItemsPerRow] = useState(3);
 
   useEffect(() => {
     const handleResize = () => {
       const windowWidth = window?.innerWidth ?? breakpoints.small;
-      if (windowWidth <= breakpoints.small) {
+      if (windowWidth <= breakpoints.mobile) {
+        setItemsPerRow(1);
+      } else if (windowWidth <= breakpoints.small) {
         setItemsPerRow(3);
       } else if (windowWidth <= breakpoints.large) {
         setItemsPerRow(4);
@@ -32,10 +33,6 @@ const ItemsList = () => {
     () => makeRowGroups(allItems, itemsPerRow),
     [allItems, itemsPerRow]
   );
-  const listStyles = useMemo(
-    () => ({ flexDirection: pageWraps ? 'column' : 'row' }),
-    [pageWraps]
-  );
   const noItems = useMemo(
     () => !allItems.length && !loading,
     [allItems, loading]
@@ -47,11 +44,7 @@ const ItemsList = () => {
         <p>No products are currently available.</p>
       ) : (
         groupedItems.map((group) => (
-          <div
-            key={`item-group-${Math.random()}`}
-            className='item-group'
-            style={listStyles}
-          >
+          <div key={`item-group-${Math.random()}`} className='item-group'>
             {(group ?? []).map((item) => {
               const isPlaceholder = item === 'placeholder';
               return isPlaceholder ? (
@@ -68,11 +61,11 @@ const ItemsList = () => {
           </div>
         ))
       ),
-    [groupedItems, listStyles, noItems]
+    [groupedItems, noItems]
   );
 
   return (
-    <div className='items-list' ref={containerRef}>
+    <div className='items-list'>
       {loading ? (
         <PageLoader style={{ backgroundColor: colors.white }} />
       ) : (

@@ -3,7 +3,6 @@ export * from './useDebounce';
 export * from './useDocumentHeight';
 export * from './useItems';
 export * from './useOverflowWatcher';
-export * from './usePageWrapWatcher';
 export * from './usePath';
 export * from './useSingleItem';
 export * from './useTextInputState';
