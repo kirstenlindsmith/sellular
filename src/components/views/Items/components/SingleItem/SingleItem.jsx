@@ -53,7 +53,9 @@ const SingleItem = () => {
   return (
     <Card className='single-item'>
       {loading ? (
-        <PageLoader style={{ backgroundColor: colors.white }} />
+        <PageLoader
+          style={{ backgroundColor: 'transparent', height: '100%' }}
+        />
       ) : (
         <>
           <div className='item-details'>
@@ -75,7 +77,6 @@ const SingleItem = () => {
                     className='title'
                     title={`Click to view ${title}`}
                     href={`${frontendRoutes.item}/${id}`}
-                    // onClick={handleViewItem}
                     aria-label={`Click to view ${title || 'Untitled product'}`}
                   >
                     {title || 'Untitled product'}

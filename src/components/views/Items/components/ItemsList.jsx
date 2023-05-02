@@ -83,7 +83,7 @@ const ItemsList = ({ pageUserName }) => {
   return (
     <div className='items-list'>
       {loading ? (
-        <PageLoader style={{ backgroundColor: colors.white }} />
+        <PageLoader style={{ backgroundColor: 'transparent' }} />
       ) : (
         <Items />
       )}
