@@ -98,18 +98,20 @@ const SingleItemProvider = ({ children, item }) => {
       if (!imageElement) return;
       const width = imageElement.getBoundingClientRect()?.width ?? 0;
       const height = imageElement.getBoundingClientRect()?.height ?? 0;
-      if (width > height) {
-        setImageSize({ height: '100%', width: 'auto' });
-      } else {
+      const isTall = width < height;
+      if (isTall) {
         setImageSize({ height: 'auto', width: '100%' });
+      } else {
+        setImageSize({ height: '100%', width: 'auto' });
       }
+
       const imageContainer = document?.getElementById(`${id}-image-container`);
       if (!imageContainer) return;
       const containerWidth = imageContainer.getBoundingClientRect()?.width ?? 0;
       const containerHeight =
         imageContainer.getBoundingClientRect()?.height ?? 0;
-      const offsetX = (width - containerWidth) / 2;
-      const offsetY = (height - containerHeight) / 2;
+      const offsetX = isTall ? 0 : (width - containerWidth) / 2;
+      const offsetY = isTall ? (height - containerHeight) / 2 : 0;
       setImageTranslate(`translate(${-offsetX}px, ${-offsetY}px)`);
     };
 

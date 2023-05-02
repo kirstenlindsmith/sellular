@@ -27,7 +27,7 @@
 
 .centered-page {
   width: 100%;
-  height: 100%;
+  height: var(--document-height);
   display: flex;
   justify-content: center;
   align-items: center;

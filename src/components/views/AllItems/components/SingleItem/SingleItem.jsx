@@ -1,6 +1,6 @@
 import { colors } from '../../../../../constants';
 import { formatStringToDollars, formatTimestamp } from '../../../../../helpers';
-import { useSingleItem } from '../../../../../hooks';
+import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
 import Input from '../../../../shared/Input';
@@ -42,7 +42,7 @@ const SingleItem = () => {
                 editModeActive ? 'edit-mode' : ''
               }`}
             >
-              <div className='row'>
+              <>
                 {editModeActive ? (
                   <Input
                     name='Product name'
@@ -60,7 +60,7 @@ const SingleItem = () => {
                     {title || 'Untitled product'}
                   </Link>
                 )}
-              </div>
+              </>
               {editModeActive ? (
                 <div className='row center price-input'>
                   <Input

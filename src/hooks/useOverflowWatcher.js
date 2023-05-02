@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export const useOverflowWatcher = ({ watch } = {}) => {
+export const useOverflowWatcher = (watch) => {
   const componentRef = useRef(null);
   const [overflows, setOverflows] = useState(false);
 
