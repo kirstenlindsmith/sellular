@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { colors } from '../../../../../constants';
 import {
   formatStringToDollars,
@@ -35,9 +35,13 @@ const SingleItem = () => {
     },
   } = useSingleItem();
   const { componentRef: priceRef, overflows: priceOverflows } =
+    useOverflowWatcher(price);
+  const { componentRef: titleRef, overflows: titleOverflows } =
     useOverflowWatcher(title);
 
-  const titleTooltipData = useMemo(() => `Click to view ${title}`, [title]);
+  const [titleTooltipData, setTitleTooltipData] = useState(() =>
+    titleOverflows ? title : undefined
+  );
   const [priceTooltipData, setPriceTooltipData] = useState(
     formatStringToDollars(price)
   );
@@ -47,12 +51,13 @@ const SingleItem = () => {
       setPriceTooltipData(
         priceOverflows ? formatStringToDollars(price) : undefined
       );
+      setTitleTooltipData(titleOverflows ? title : undefined);
     };
     handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [price, priceOverflows]);
+  }, [price, priceOverflows, title, titleOverflows]);
 
   useEffect(() => {
     handleTooltips();
@@ -84,11 +89,12 @@ const SingleItem = () => {
                     data-tooltip={titleTooltipData}
                   >
                     <Link
+                      ref={titleRef}
+                      className='title'
+                      onClick={handleViewItem}
                       aria-label={`Click to view ${
                         title || 'Untitled product'
                       }`}
-                      className='title'
-                      onClick={handleViewItem}
                     >
                       {title || 'Untitled product'}
                     </Link>

@@ -67,7 +67,6 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex: 0 1 auto;
 }
 
 .header-row h1 {

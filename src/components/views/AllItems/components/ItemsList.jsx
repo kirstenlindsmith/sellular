@@ -52,13 +52,11 @@ const ItemsList = () => {
 
   return (
     <div className='items-list' ref={containerRef}>
-      <div className='scroll-container'>
-        {loading ? (
-          <PageLoader style={{ backgroundColor: colors.white }} />
-        ) : (
-          <Items />
-        )}
-      </div>
+      {loading ? (
+        <PageLoader style={{ backgroundColor: colors.white }} />
+      ) : (
+        <Items />
+      )}
     </div>
   );
 };

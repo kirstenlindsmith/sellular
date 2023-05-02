@@ -9,6 +9,7 @@ const skipToMainStyles = {
   height: '3.125rem',
   maxHeight: '3.125rem',
   padding: '2.25rem 3rem 1.5rem',
+  zIndex: '10000',
 };
 
 const SkipToMainContent = () => {

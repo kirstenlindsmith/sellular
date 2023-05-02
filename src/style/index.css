@@ -57,11 +57,6 @@ link {
   cursor: pointer;
 }
 
-button:hover,
-button:focus {
-  mix-blend-mode: multiply;
-}
-
 h1,
 p {
   margin: 0;
