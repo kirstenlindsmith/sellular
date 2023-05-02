@@ -16,6 +16,27 @@ export const remToPixels = (remString = '1rem') => {
   return rem * localFontSize;
 };
 
+export const makeRowGroups = (allItems, count = 3) => {
+  if (!allItems) return [];
+  const roundedItems = [...allItems];
+  //if the total items count isn't evenly divisible by the count...
+  while (roundedItems.length % count !== 0) {
+    //..fill empty row slots with placeholders, to make sure spacing for rows stays consistent despite flex grow styling
+    roundedItems.push('placeholder');
+  }
+  const result = [];
+  roundedItems.forEach((item, index) => {
+    //prepare a row for every group of {count} items
+    if (index % count === 0) {
+      result.push([]);
+    }
+    //directly access each row to establish its members, for time efficiency
+    result[result.length - 1].push(item);
+  });
+  return result;
+};
+
+//NOTE: ended up not using tooltip due to a very strange DOM bug I can elaborate on if asked
 export const handleTooltips = () => {
   let showTooltipTimer = null;
 

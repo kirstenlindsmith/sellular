@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import { colors } from '../../../../constants';
-import { makeGroupsOfThree } from '../AllItems.helpers';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { breakpoints, colors } from '../../../../constants';
+import { makeRowGroups } from '../../../../helpers';
 import { useItems, usePageWrapWatcher } from '../../../../hooks';
 import PageLoader from '../../../PageLoader';
 import SingleItem from './SingleItem';
@@ -10,11 +10,32 @@ const ItemsList = () => {
   const { allItems, loading } = useItems();
   const { pageWraps, containerRef } = usePageWrapWatcher();
 
+  const [itemsPerRow, setItemsPerRow] = useState(3);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const windowWidth = window?.innerWidth ?? breakpoints.small;
+      if (windowWidth <= breakpoints.small) {
+        setItemsPerRow(3);
+      } else if (windowWidth <= breakpoints.large) {
+        setItemsPerRow(4);
+      } else {
+        setItemsPerRow(5);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const groupedItems = useMemo(
+    () => makeRowGroups(allItems, itemsPerRow),
+    [allItems, itemsPerRow]
+  );
   const listStyles = useMemo(
     () => ({ flexDirection: pageWraps ? 'column' : 'row' }),
     [pageWraps]
   );
-  const groupedItems = useMemo(() => makeGroupsOfThree(allItems), [allItems]);
   const noItems = useMemo(
     () => !allItems.length && !loading,
     [allItems, loading]

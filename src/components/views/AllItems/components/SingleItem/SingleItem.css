@@ -48,16 +48,6 @@
   word-break: break-all;
 }
 
-.single-item .title-container,
-.single-item .price-container {
-  max-width: 100%;
-}
-
-.single-item .price-container .tooltip-content {
-  max-width: 100%;
-  word-break: break-all;
-}
-
 .single-item .title,
 .single-item .price {
   padding-top: 0.15rem;

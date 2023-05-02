@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { colors } from '../../../../../constants';
-import {
-  formatStringToDollars,
-  formatTimestamp,
-  handleTooltips,
-} from '../../../../../helpers';
+import { formatStringToDollars, formatTimestamp } from '../../../../../helpers';
 import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
@@ -36,32 +32,20 @@ const SingleItem = () => {
   } = useSingleItem();
   const { componentRef: priceRef, overflows: priceOverflows } =
     useOverflowWatcher(price);
-  const { componentRef: titleRef, overflows: titleOverflows } =
-    useOverflowWatcher(title);
 
-  const [titleTooltipData, setTitleTooltipData] = useState(() =>
-    titleOverflows ? title : undefined
-  );
-  const [priceTooltipData, setPriceTooltipData] = useState(
-    formatStringToDollars(price)
+  const [priceTitle, setPriceTitle] = useState(
+    priceOverflows ? formatStringToDollars(price) : undefined
   );
 
   useEffect(() => {
     const handleResize = () => {
-      setPriceTooltipData(
-        priceOverflows ? formatStringToDollars(price) : undefined
-      );
-      setTitleTooltipData(titleOverflows ? title : undefined);
+      setPriceTitle(priceOverflows ? formatStringToDollars(price) : undefined);
     };
     handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [price, priceOverflows, title, titleOverflows]);
-
-  useEffect(() => {
-    handleTooltips();
-  }, [priceTooltipData]);
+  }, [price, priceOverflows]);
 
   return (
     <Card className='single-item'>
@@ -84,21 +68,14 @@ const SingleItem = () => {
                     fieldHandler={itemTitle}
                   />
                 ) : (
-                  <div
-                    className='title-container'
-                    data-tooltip={titleTooltipData}
+                  <Link
+                    className='title'
+                    title={`Click to view ${title}`}
+                    onClick={handleViewItem}
+                    aria-label={`Click to view ${title || 'Untitled product'}`}
                   >
-                    <Link
-                      ref={titleRef}
-                      className='title'
-                      onClick={handleViewItem}
-                      aria-label={`Click to view ${
-                        title || 'Untitled product'
-                      }`}
-                    >
-                      {title || 'Untitled product'}
-                    </Link>
-                  </div>
+                    {title || 'Untitled product'}
+                  </Link>
                 )}
               </>
               {editModeActive ? (
@@ -112,14 +89,9 @@ const SingleItem = () => {
                   />
                 </div>
               ) : (
-                <div
-                  className='price-container'
-                  data-tooltip={priceTooltipData}
-                >
-                  <p className='price' ref={priceRef}>
-                    {formatStringToDollars(price)}
-                  </p>
-                </div>
+                <p className='price' ref={priceRef} title={priceTitle}>
+                  {formatStringToDollars(price)}
+                </p>
               )}
             </div>
             <div id={`${id}-image-container`} className='image-container'>

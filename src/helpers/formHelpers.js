@@ -61,8 +61,10 @@ export const validateStringLength =
 
 export const validateDollarField = (value) => {
   if (!value) return;
-  const dollarRegex = /^(?:0|[1-9]\d+|)?(?:.?\d{0,2})?$/;
+  const dollarRegex = /^(?:0|[1-9]\d+|)?(?:\.?\d{0,2})?$/;
   if (!dollarRegex.test(value)) {
     return 'Invalid price';
+  } else if (formatStringToDecimalNumber(value) > 1000000000) {
+    return `Price too high`;
   }
 };

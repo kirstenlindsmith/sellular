@@ -18,8 +18,8 @@ export const usePageWrapWatcher = (defaultWrapBreakpoint = 760) => {
       );
     };
     checkIfPageWraps();
-    window?.addEventListener('resize', checkIfPageWraps);
-    return () => window?.removeEventListener('resize', checkIfPageWraps);
+    window.addEventListener('resize', checkIfPageWraps);
+    return () => window.removeEventListener('resize', checkIfPageWraps);
   }, [breakpointForUserFont]);
 
   return {
