@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
-import { colors } from '../constants';
-import { bestTextColor, interactColor } from '../helpers';
+import { colors } from '../../constants';
+import { bestTextColor, interactColor } from '../../helpers';
 
 const buttonSizes = {
   small: {

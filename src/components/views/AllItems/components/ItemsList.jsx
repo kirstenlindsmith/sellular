@@ -6,10 +6,11 @@ import {
   useOverflowWatcher,
   usePageWrapWatcher,
 } from '../../../../hooks';
-import Button from '../../../Button';
+import Button from '../../../shared/Button';
 import PageLoader from '../../../PageLoader';
 import PlusIcon from '../../../../assets/PlusIcon';
 import SingleItem from './SingleItem';
+import SingleItemProvider from '../../../../context/singleItemContext';
 
 const ItemsList = () => {
   const { addItem, allItems, loading } = useItems();
@@ -49,7 +50,9 @@ const ItemsList = () => {
                   className='single-item placeholder-item'
                 />
               ) : (
-                <SingleItem key={item.id} {...item} />
+                <SingleItemProvider key={item.id} item={item}>
+                  <SingleItem />
+                </SingleItemProvider>
               );
             })}
           </div>
@@ -62,7 +65,7 @@ const ItemsList = () => {
     <div>
       <main className='header-row' ref={componentRef} style={headerStyles}>
         <h1>All products</h1>
-        <Button size='small' onClick={addItem}>
+        <Button onClick={addItem}>
           <PlusIcon color={colors.white} size={'1rem'} /> Add
         </Button>
       </main>

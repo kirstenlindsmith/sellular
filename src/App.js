@@ -1,3 +1,4 @@
+import { useDocumentHeight } from './hooks';
 import AuthBar from './components/AuthBar';
 import ErrorBoundary from './components/ErrorBoundary';
 import ItemsProvider from './context/itemsContext';
@@ -7,13 +8,17 @@ import UserProvider from './context/userContext';
 import './style/App.css';
 
 function App() {
+  useDocumentHeight();
+
   return (
     <ErrorBoundary>
       <UserProvider>
         <ItemsProvider>
           <SkipToMainContent />
-          <AuthBar />
-          <Router />
+          <div>
+            <AuthBar />
+            <Router />
+          </div>
         </ItemsProvider>
       </UserProvider>
     </ErrorBoundary>

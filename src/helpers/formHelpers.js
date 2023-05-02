@@ -6,7 +6,10 @@ export const formatTimestamp = (inputDate) => {
   const rawHours = date?.getHours() || 0;
   const isPM = rawHours > 11;
   const hours = isPM ? rawHours - 12 : rawHours;
-  const minutes = date?.getMinutes() || '00';
+  let minutes = date?.getMinutes() || '00';
+  if (typeof minutes === 'number' && minutes < 10) {
+    minutes = `0${minutes}`;
+  }
   return `${month}/${day}/${year}, ${hours}:${minutes} ${isPM ? 'PM' : 'AM'}`;
 };
 

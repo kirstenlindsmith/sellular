@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { useTimeoutAction } from '../hooks';
-import Button from './Button';
+import Button from './shared/Button';
 
 const skipToMainStyles = {
   position: 'absolute',

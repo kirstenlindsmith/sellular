@@ -1,0 +1,11 @@
+.card {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 5px;
+  background-color: var(--white);
+  box-shadow: var(--box-shadow);
+  min-width: min-content;
+  min-height: 5rem;
+  padding: 1rem;
+}

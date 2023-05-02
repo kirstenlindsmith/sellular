@@ -1,4 +1,10 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { backendRoutes, storageKeys } from '../constants';
 import {
   filterOutTarget,
@@ -18,6 +24,7 @@ const initialValue = {
   addItem: () => undefined,
   saveItem: () => undefined,
   removeItem: () => undefined,
+  setUserItems: () => undefined,
 };
 
 export const ItemsContext = createContext(initialValue);
@@ -31,6 +38,12 @@ const ItemsProvider = ({ children }) => {
   );
   const [allItems, setAllItems] = useState(() =>
     getArrayItem(storageKeys.allItems)
+  );
+
+  const hasUserItems = useMemo(
+    () =>
+      !!userItems.length || allItems.some((item) => item.author === userName),
+    [allItems, userItems.length, userName]
   );
 
   const resetLoadingState = useCallback(() => setLoading(false), []);
@@ -74,6 +87,13 @@ const ItemsProvider = ({ children }) => {
       });
     }
   }, [allItems.length, fetchRemoteItems, userItems]);
+
+  useEffect(() => {
+    //populate user's own items if needed
+    if (!userItems.length && hasUserItems) {
+      setUserItems(allItems.filter((item) => item.author === userName));
+    }
+  }, [allItems, hasUserItems, userItems.length, userName]);
 
   const addItem = useCallback(() => {
     const NewItem = new Item();
@@ -121,6 +141,7 @@ const ItemsProvider = ({ children }) => {
     <ItemsContext.Provider
       value={{
         userItems,
+        setUserItems,
         allItems,
         loading,
         loadingItemIds,

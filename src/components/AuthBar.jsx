@@ -1,14 +1,18 @@
-import { frontendRoutes } from '../constants';
-import { useUser } from '../hooks';
-import Link from './Link';
+/* eslint-disable no-restricted-globals */
+import { colors, frontendRoutes } from '../constants';
+import { usePath, useUser } from '../hooks';
+import ArrowLeftIcon from '../assets/ArrowLeftIcon';
+import Link from './shared/Link';
 import sharedStyles from '../style/shared.styles';
+import { useCallback, useMemo } from 'react';
+import Button from './shared/Button';
 
 const authBarStyles = {
   ...sharedStyles.row,
-  justifyContent: 'flex-end',
+  justifyContent: 'space-between',
   width: '100%',
   padding: '1rem 2rem',
-  position: 'fixed',
+  position: 'absolute',
   top: 0,
   zIndex: 1000,
 };
@@ -31,10 +35,31 @@ const linkStyle = {
 };
 
 const AuthBar = () => {
+  const path = usePath();
   const { signedIn, userName } = useUser();
+  const showBackButton = useMemo(
+    () =>
+      path === frontendRoutes.userItems || path.includes(frontendRoutes.item),
+    [path]
+  );
+
+  const handleBack = useCallback(() => {
+    history?.back();
+  }, []);
 
   return signedIn ? (
     <div style={authBarStyles}>
+      <div>
+        {showBackButton ? (
+          <Button
+            onClick={handleBack}
+            color='transparent'
+            textColor={colors.teal}
+          >
+            <ArrowLeftIcon size='0.75rem' color={colors.teal} /> Back
+          </Button>
+        ) : null}
+      </div>
       <div style={authStyles}>
         <p style={nameStyles}>Hi, {userName || 'friend'}!</p>
         <Link href={frontendRoutes.signOut} style={linkStyle}>

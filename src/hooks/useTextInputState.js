@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { defaultTextInputState } from '../constants';
 import { useDebounce } from './useDebounce';
 
 const fieldIsEmpty = (value, minLength = 1) =>
@@ -28,12 +29,14 @@ export const useTextInputState = (options = defaultOptions) => {
   } = { ...defaultOptions, ...options };
 
   const firstInitialValue = useRef(initialValue);
-  const [value, setValue] = useState(initialValue ?? '');
-  const [everChanged, setEverChanged] = useState(false);
-  const [changed, setChanged] = useState(false);
-  const [touched, setTouched] = useState(false);
-  const [blurred, setBlurred] = useState(false);
-  const [error, setError] = useState();
+  const [value, setValue] = useState(
+    initialValue ?? defaultTextInputState.value
+  );
+  const [everChanged, setEverChanged] = useState(defaultTextInputState.changed);
+  const [changed, setChanged] = useState(defaultTextInputState.changed);
+  const [touched, setTouched] = useState(defaultTextInputState.touched);
+  const [blurred, setBlurred] = useState(defaultTextInputState.blurred);
+  const [error, setError] = useState(defaultTextInputState.error);
   const [overrideShowError, setOverrideShowError] = useState(false);
   const debouncedValue = useDebounce(value, debounceDelay);
 

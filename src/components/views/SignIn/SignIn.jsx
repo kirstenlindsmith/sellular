@@ -2,8 +2,8 @@ import { useCallback, useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
 import { navigate, validateStringLength } from '../../../helpers';
 import { useTextInputState, useUser } from '../../../hooks';
-import Button from '../../Button';
-import Input from '../../Input';
+import Button from '../../shared/Button';
+import Input from '../../shared/Input';
 import sharedStyles from '../../../style/shared.styles';
 import './SignIn.css';
 
@@ -34,7 +34,7 @@ const SignIn = () => {
         <Input
           name='name'
           label='Name'
-          placeholder='Enter your name'
+          placeholder='Enter your name (case sensitive)'
           fieldHandler={name}
         />
         <Button fullWidth type='submit'>
