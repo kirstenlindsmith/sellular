@@ -5,10 +5,11 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { defaultTextInputState } from '../constants';
+import { defaultTextInputState, frontendRoutes } from '../constants';
 import {
   formatNumberToToDecimalString,
   formatStringToDecimalNumber,
+  navigate,
   validateDollarField,
   validateStringLength,
 } from '../helpers';
@@ -28,6 +29,7 @@ const initialValue = {
   handleEdit: () => undefined,
   handleSave: () => undefined,
   handleDelete: () => undefined,
+  handleViewItem: () => undefined,
 };
 
 export const SingleItemContext = createContext(initialValue);
@@ -40,7 +42,7 @@ const SingleItemProvider = ({ children, item }) => {
     price,
     image,
     unsaved, //temporary flag, only exists on new user items
-  } = item;
+  } = item ?? new Item();
   const { userName } = useUser();
   const { removeItem, saveItem, loadingItemIds, allItems } = useItems();
   const loading = useMemo(
@@ -116,11 +118,15 @@ const SingleItemProvider = ({ children, item }) => {
     return () => window.removeEventListener('resize', getImageStyles());
   }, [id]);
 
+  const handleViewItem = useCallback(
+    () => navigate(`${frontendRoutes.item}/${id}`),
+    [id]
+  );
+
   const handleEdit = useCallback(() => setEditModeActive(true), []);
 
   const handleSave = useCallback(
     (e) => {
-      console.log('???');
       e.preventDefault();
       if (
         itemTitle.valid &&
@@ -170,6 +176,7 @@ const SingleItemProvider = ({ children, item }) => {
         handleEdit,
         handleSave,
         handleDelete,
+        handleViewItem,
       }}
     >
       {children}

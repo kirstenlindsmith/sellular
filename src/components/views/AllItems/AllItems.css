@@ -1,24 +1,9 @@
-.header-row {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.header-row h1 {
-  white-space: nowrap;
-}
-
-.header-row button {
-  padding-right: 0.75rem !important;
-  margin-top: 0.25rem;
-}
-
 .items-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
-  border-radius: 4px;
+  border-radius: 5px;
   overflow: auto;
   min-height: 13rem;
   position: fixed;

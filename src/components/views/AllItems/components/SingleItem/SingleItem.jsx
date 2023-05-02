@@ -2,8 +2,10 @@ import { colors } from '../../../../../constants';
 import { formatStringToDollars, formatTimestamp } from '../../../../../helpers';
 import { useSingleItem } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
-import Input from '../../../../Input';
+import Card from '../../../../shared/Card';
+import Input from '../../../../shared/Input';
 import ItemActionButtons from './ItemActionButtons';
+import Link from '../../../../shared/Link';
 import PageLoader from '../../../../PageLoader';
 import './SingleItem.css';
 
@@ -16,6 +18,7 @@ const SingleItem = () => {
     itemPrice,
     itemDescription,
     imageUrl,
+    handleViewItem,
     item: {
       id,
       author,
@@ -28,7 +31,7 @@ const SingleItem = () => {
   } = useSingleItem();
 
   return (
-    <div className='single-item'>
+    <Card className='single-item'>
       {loading ? (
         <PageLoader style={{ backgroundColor: colors.white }} />
       ) : (
@@ -48,7 +51,14 @@ const SingleItem = () => {
                     fieldHandler={itemTitle}
                   />
                 ) : (
-                  <p className='title'>{title || 'Untitled product'}</p>
+                  <Link
+                    title='View product'
+                    aria-label={`${title || 'Untitled product'}: click to view`}
+                    className='title'
+                    onClick={handleViewItem}
+                  >
+                    {title || 'Untitled product'}
+                  </Link>
                 )}
               </div>
               {editModeActive ? (
@@ -112,7 +122,7 @@ const SingleItem = () => {
           </div>
         </>
       )}
-    </div>
+    </Card>
   );
 };
 

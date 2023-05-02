@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { frontendRoutes } from '../../constants';
 import { navigate } from '../../helpers';
-import Button from '../Button';
+import Button from '../shared/Button';
 import sharedStyles from '../../style/shared.styles';
 
 const pageContentStyles = {

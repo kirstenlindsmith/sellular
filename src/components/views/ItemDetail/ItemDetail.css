@@ -1,0 +1,66 @@
+.product-detail main {
+  min-height: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-detail .page-content {
+  padding: 1rem 0 2rem;
+  gap: 1.5rem;
+}
+
+.product-detail .header-row .input-section {
+  margin-bottom: 0 !important;
+  font-weight: normal !important;
+}
+
+.product-detail .save-delete-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.product-detail .save-delete-buttons button {
+  width: 5.438rem !important;
+  margin-top: 0;
+}
+
+.product-detail .input-section label {
+  font-weight: 550;
+  font-size: 1rem;
+  top: -1.4rem;
+}
+
+.product-detail .description-card {
+  flex: 1;
+  min-height: 15rem;
+}
+
+.product-detail .description-card.edit-mode {
+  padding: 2.25rem 1.75rem 0 1.5rem;
+}
+
+.product-detail .field {
+  margin-bottom: 1.125rem;
+}
+
+.product-detail .field-name {
+  font-weight: 550;
+}
+
+.product-detail .field.edit-mode {
+  margin-top: 2rem;
+}
+
+.product-detail img {
+  max-width: 35vw !important;
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 766px) {
+  .product-detail .page-content {
+    flex-direction: column;
+  }
+  .product-detail img {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

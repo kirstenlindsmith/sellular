@@ -2,6 +2,8 @@ export const frontendRoutes = {
   home: '/',
   signIn: '/sign-in',
   signOut: '/sign-out',
+  item: '/product',
+  userItems: '/my-products',
 };
 
 export const backendRoutes = {

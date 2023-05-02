@@ -3,7 +3,7 @@ import { useSingleItem } from '../../../../../hooks';
 import DeleteIcon from '../../../../../assets/DeleteIcon';
 import EditIcon from '../../../../../assets/EditIcon';
 import SaveIcon from '../../../../../assets/SaveIcon';
-import Button from '../../../../Button';
+import Button from '../../../../shared/Button';
 
 const ItemActionButtons = () => {
   const { editModeActive, handleEdit, handleDelete, handleSave, isUserItem } =

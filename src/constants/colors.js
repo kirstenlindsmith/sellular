@@ -1,8 +1,8 @@
 export const colors = {
   white: '#f5f5f5',
   black: '#333333',
-  textSecondary: '#6d6d6d',
-  textDisabled: '#a2a2a2',
+  gray: '#6d6d6d',
+  lightGray: '#a2a2a2',
   red: '#bd3c3c',
   orange: '#e19068',
   yellow: '#d1c462',

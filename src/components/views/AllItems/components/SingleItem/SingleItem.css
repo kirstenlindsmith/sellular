@@ -1,5 +1,4 @@
 .single-item {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -8,26 +7,23 @@
   padding: 2rem 2rem 1.5rem;
   min-width: 12.5rem;
   min-height: 20rem;
-  border-radius: 4px;
-  background-color: var(--white);
-  box-shadow: var(--box-shadow);
 }
 
-.placeholder-item {
+.single-item .placeholder-item {
   box-shadow: none !important;
 }
 
-.listing-info-row {
+.single-item .listing-info-row {
   display: flex;
   justify-content: space-between;
 }
 
-.item-details .listing-info-row {
+.single-item .item-details .listing-info-row {
   margin-bottom: 1.125rem;
   height: 1.938rem;
 }
 
-.item-details .listing-info-row.edit-mode {
+.single-item .item-details .listing-info-row.edit-mode {
   margin-bottom: 0;
   height: auto;
 }
@@ -41,8 +37,8 @@
   overflow: hidden;
   width: 100%;
   padding-bottom: 100%;
-  border-radius: 4px;
-  outline: 1px solid var(--textDisabled);
+  border-radius: 5px;
+  outline: 1px solid var(--lightGray);
   outline-offset: -1px;
 }
 
@@ -52,7 +48,7 @@
   height: 100%;
 }
 
-.placeholder-image {
+.single-item .placeholder-image {
   width: 100% !important;
   height: auto !important;
   transform: none !important;
@@ -61,6 +57,7 @@
 .single-item .title {
   font-size: 1.25rem;
   font-weight: 550;
+  cursor: pointer;
 }
 
 .single-item .price {
@@ -81,7 +78,7 @@
   margin-bottom: -1.25rem;
 }
 
-.submission-info {
+.single-item .submission-info {
   margin-top: 1rem;
 }
 
@@ -89,21 +86,12 @@
   font-weight: 550;
 }
 
-.single-item .input-and-label label {
-  position: absolute;
-  top: -1.25rem;
-}
-
 .single-item .price-input {
   max-width: 40%;
   margin-left: 0.5rem;
 }
 
-.single-item .price-input p {
-  margin-right: 0.25rem;
-}
-
-.image-container .image-input {
+.single-item .image-container .image-input {
   position: absolute !important;
   width: calc(100% - 2px);
   padding: 1rem 0;
@@ -111,18 +99,18 @@
   left: 1px;
 }
 
-.image-container .input-section {
+.single-item .image-container .input-section {
   z-index: 100;
   width: 90%;
   left: 5%;
 }
 
-.image-container .input-and-label label {
+.single-item .image-container .input-and-label label {
   position: relative !important;
   top: 0;
 }
 
-.image-container .input-bg {
+.single-item .image-container .input-bg {
   position: absolute;
   top: 0;
   background-color: var(--white);

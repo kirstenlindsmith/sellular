@@ -44,7 +44,7 @@ const Input = ({
       }`}
     >
       <div className='icon-and-input'>
-        {startIcon ?? null}
+        <span className='start-icon'>{startIcon ?? null}</span>
         <div className={`input-and-label ${fullWidth ? 'full-width' : ''}`}>
           <InputComponent
             name={name}

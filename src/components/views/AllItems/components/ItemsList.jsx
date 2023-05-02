@@ -6,7 +6,7 @@ import {
   useOverflowWatcher,
   usePageWrapWatcher,
 } from '../../../../hooks';
-import Button from '../../../Button';
+import Button from '../../../shared/Button';
 import PageLoader from '../../../PageLoader';
 import PlusIcon from '../../../../assets/PlusIcon';
 import SingleItem from './SingleItem';
@@ -65,7 +65,7 @@ const ItemsList = () => {
     <div>
       <main className='header-row' ref={componentRef} style={headerStyles}>
         <h1>All products</h1>
-        <Button size='small' onClick={addItem}>
+        <Button onClick={addItem}>
           <PlusIcon color={colors.white} size={'1rem'} /> Add
         </Button>
       </main>

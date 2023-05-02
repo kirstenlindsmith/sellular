@@ -46,10 +46,11 @@
 
 .standard-page {
   width: 100%;
-  height: 100%;
+  height: var(--document-height);
   display: flex;
   flex-direction: column;
-  padding: 4.5rem 2rem 2rem;
+  padding: 5rem 2rem 2rem;
+  overflow: auto;
 }
 
 .fixed-page {
@@ -59,6 +60,21 @@
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.header-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.header-row h1 {
+  white-space: nowrap;
+}
+
+.header-row button {
+  padding-right: 0.75rem !important;
+  margin-top: 0.25rem;
 }
 
 .input-section {
@@ -75,6 +91,16 @@
   flex-direction: column-reverse;
   gap: 0.25rem;
   width: 100%;
+}
+
+.input-and-label label {
+  position: absolute;
+  top: -1.25rem;
+}
+
+.start-icon {
+  position: absolute;
+  left: -0.875rem;
 }
 
 .input-section .full-width {
@@ -98,7 +124,7 @@
 .input-section input,
 .input-section textarea {
   width: 100%;
-  border-radius: 4px;
+  border-radius: 5px;
   outline: 1px solid var(--black);
   border: none;
   padding: 0.5rem;
