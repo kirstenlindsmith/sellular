@@ -8,6 +8,7 @@
   --yellow: #d1c462;
   --green: #629e44;
   --teal: #489c95;
+  --lightTeal: rgba(18, 163, 167, 0.1);
   --blue: #447b9e;
   --purple: #6f609e;
   --pink: #ba72b4;
@@ -16,15 +17,17 @@
     0px 3px 4px rgba(25, 94, 89, 0.14), 0px 1px 8px rgba(25, 94, 89, 0.12);
 }
 
+html {
+  background-color: var(--lightTeal);
+}
+
 html,
 body,
 #root {
   padding: 0;
   margin: 0;
-  height: 100vh; /*fallback for js loadtime*/
-  height: var(--document-height);
+  height: 100vh;
   color: var(--black);
-  background-color: var(--white);
 }
 
 * {
@@ -36,6 +39,7 @@ a {
   color: var(--teal);
   text-decoration: underline;
   text-decoration-style: solid;
+  cursor: pointer;
 }
 
 a:hover,

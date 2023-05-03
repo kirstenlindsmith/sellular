@@ -10,6 +10,10 @@ const ItemDetailContainer = () => {
   const { signedIn } = useUser();
   const { allItems } = useItems();
 
+  useEffect(() => {
+    if (!signedIn) navigate(frontendRoutes.signIn);
+  }, [signedIn]);
+
   const itemId = useMemo(
     () =>
       path.slice(
@@ -18,13 +22,9 @@ const ItemDetailContainer = () => {
     [path]
   );
   const item = useMemo(
-    () => allItems.find((item) => item.id === itemId),
+    () => allItems.find((item) => item?.id === itemId),
     [allItems, itemId]
   );
-
-  useEffect(() => {
-    if (!signedIn) navigate(frontendRoutes.signIn);
-  }, [signedIn]);
 
   return (
     <SingleItemProvider item={item}>

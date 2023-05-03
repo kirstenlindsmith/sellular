@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defaultTextInputState } from '../constants';
-import { useDebounce } from './useDebounce';
+import useTimeoutEffect from './useTimeoutEffect';
 
 const fieldIsEmpty = (value, minLength = 1) =>
   !value?.length || (value?.length ?? 0) < minLength;
@@ -9,22 +9,19 @@ const defaultOptions = {
   initialValue: '',
   required: false,
   requiredText: 'Required',
-  minLength: undefined,
   normalizer: (value) => value,
   validation: (_value) => undefined,
-  validateOn: 'debounce', //'touch', 'blur', 'debounce', 'debounceTouch'
   debounceDelay: 700,
 };
 
+//NOTE: this is a pared-down version of the custom hook I've developed for string form states.
 export const useTextInputState = (options = defaultOptions) => {
   const {
     initialValue,
     required,
     requiredText,
-    minLength,
     normalizer,
     validation,
-    validateOn,
     debounceDelay,
   } = { ...defaultOptions, ...options };
 
@@ -34,59 +31,28 @@ export const useTextInputState = (options = defaultOptions) => {
   );
   const [everChanged, setEverChanged] = useState(defaultTextInputState.changed);
   const [changed, setChanged] = useState(defaultTextInputState.changed);
-  const [touched, setTouched] = useState(defaultTextInputState.touched);
-  const [blurred, setBlurred] = useState(defaultTextInputState.blurred);
   const [error, setError] = useState(defaultTextInputState.error);
   const [overrideShowError, setOverrideShowError] = useState(false);
-  const debouncedValue = useDebounce(value, debounceDelay);
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
-  const valueToValidate = useMemo(
-    () =>
-      validateOn === 'debounce' || validateOn === 'debounceTouch'
-        ? debouncedValue
-        : value,
-    [validateOn, debouncedValue, value]
-  );
+  const updateValue = useCallback(() => setDebouncedValue(value), [value]);
+  useTimeoutEffect({
+    callback: updateValue, //when callback changes, timer will restart
+    debounceDelay,
+  });
 
   const valid = useMemo(
     () =>
       !error?.length &&
       !validation?.(value)?.length &&
-      (required ? !fieldIsEmpty(value, minLength) : true),
-    [error?.length, minLength, required, validation, value]
+      (required ? !fieldIsEmpty(value) : true),
+    [error?.length, required, validation, value]
   );
 
   const runValidation = useMemo(() => {
     if (overrideShowError) return true;
-    switch (validateOn) {
-      case 'blur':
-        return blurred;
-      case 'debounce':
-        return everChanged && value === debouncedValue;
-      case 'debounceTouch':
-        return touched && value === debouncedValue;
-      case 'touch':
-      default:
-        return touched;
-    }
-  }, [
-    overrideShowError,
-    validateOn,
-    blurred,
-    everChanged,
-    value,
-    debouncedValue,
-    touched,
-  ]);
-
-  const setInteract = useCallback(
-    (userHasInteracted) => {
-      validateOn === 'blur'
-        ? setBlurred(userHasInteracted)
-        : setTouched(userHasInteracted);
-    },
-    [validateOn]
-  );
+    return everChanged && value === debouncedValue;
+  }, [overrideShowError, everChanged, value, debouncedValue]);
 
   const handleSetValue = useCallback(
     (value) => setValue(normalizer?.(value) ?? value),
@@ -97,8 +63,6 @@ export const useTextInputState = (options = defaultOptions) => {
 
   const reset = useCallback(() => {
     setError(null);
-    setBlurred(false);
-    setTouched(false);
     setChanged(false);
     setEverChanged(false);
     setOverrideShowError(false);
@@ -120,29 +84,18 @@ export const useTextInputState = (options = defaultOptions) => {
     } else if (changed && value === (initialValue ?? '')) {
       setChanged(false);
     }
-    if (!fieldIsEmpty(valueToValidate)) {
-      setTouched(true);
-    }
-    if (validation && runValidation && !!validation(valueToValidate)?.length) {
-      setError(validation(valueToValidate));
-    } else if (
-      required &&
-      runValidation &&
-      valueToValidate.length < (minLength ?? 1)
-    ) {
-      if ((minLength ?? 1) > 1) {
-        setError(`Minimum ${minLength ?? 2} characters`);
-      } else setError(requiredText || 'Required');
+    if (validation && runValidation && !!validation(debouncedValue)?.length) {
+      setError(validation(debouncedValue));
+    } else if (required && runValidation && debouncedValue.length < 1) {
+      setError(requiredText || 'Required');
     } else if (
       //a required input has text (and needs validation; allows hiding the error manually)
-      (required &&
-        runValidation &&
-        !fieldIsEmpty(valueToValidate, minLength)) ||
+      (required && runValidation && !fieldIsEmpty(debouncedValue)) ||
       //or, a field that used to be required was programmatically updated to no longer be required
       (!required &&
         (error === 'Required' || (requiredText && error === requiredText))) ||
       //validation no longer returning an error message
-      (validation && runValidation && !validation(valueToValidate)?.length) ||
+      (validation && runValidation && !validation(debouncedValue)?.length) ||
       //interact type triggering validation has been manually reset
       (validation && !runValidation && !!error?.length)
     ) {
@@ -150,9 +103,8 @@ export const useTextInputState = (options = defaultOptions) => {
       if (overrideShowError) setOverrideShowError(false);
     }
   }, [
-    valueToValidate,
+    debouncedValue,
     runValidation,
-    minLength,
     required,
     requiredText,
     validation,
@@ -168,18 +120,7 @@ export const useTextInputState = (options = defaultOptions) => {
     debouncedValue,
     setValue: handleSetValue,
     reset,
-    interact:
-      validateOn === 'blur'
-        ? blurred
-        : validateOn === 'debounce'
-        ? everChanged
-        : touched,
-    setInteract,
     changed,
-    touched,
-    setTouched,
-    blurred,
-    setBlurred,
     error,
     setError,
     forceError,

@@ -5,11 +5,10 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { defaultTextInputState, frontendRoutes } from '../constants';
+import { defaultTextInputState } from '../constants';
 import {
   formatNumberToToDecimalString,
   formatStringToDecimalNumber,
-  navigate,
   validateDollarField,
   validateStringLength,
 } from '../helpers';
@@ -29,7 +28,6 @@ const initialValue = {
   handleEdit: () => undefined,
   handleSave: () => undefined,
   handleDelete: () => undefined,
-  handleViewItem: () => undefined,
 };
 
 export const SingleItemContext = createContext(initialValue);
@@ -98,18 +96,20 @@ const SingleItemProvider = ({ children, item }) => {
       if (!imageElement) return;
       const width = imageElement.getBoundingClientRect()?.width ?? 0;
       const height = imageElement.getBoundingClientRect()?.height ?? 0;
-      if (width > height) {
-        setImageSize({ height: '100%', width: 'auto' });
-      } else {
+      const isTall = width < height;
+      if (isTall) {
         setImageSize({ height: 'auto', width: '100%' });
+      } else {
+        setImageSize({ height: '100%', width: 'auto' });
       }
+
       const imageContainer = document?.getElementById(`${id}-image-container`);
       if (!imageContainer) return;
       const containerWidth = imageContainer.getBoundingClientRect()?.width ?? 0;
       const containerHeight =
         imageContainer.getBoundingClientRect()?.height ?? 0;
-      const offsetX = (width - containerWidth) / 2;
-      const offsetY = (height - containerHeight) / 2;
+      const offsetX = isTall ? 0 : (width - containerWidth) / 2;
+      const offsetY = isTall ? (height - containerHeight) / 2 : 0;
       setImageTranslate(`translate(${-offsetX}px, ${-offsetY}px)`);
     };
 
@@ -118,30 +118,32 @@ const SingleItemProvider = ({ children, item }) => {
     return () => window.removeEventListener('resize', getImageStyles());
   }, [id]);
 
-  const handleViewItem = useCallback(
-    () => navigate(`${frontendRoutes.item}/${id}`),
-    [id]
-  );
-
   const handleEdit = useCallback(() => setEditModeActive(true), []);
 
   const handleSave = useCallback(
     (e) => {
-      e.preventDefault();
+      e?.preventDefault();
       if (
         itemTitle.valid &&
         itemPrice.valid &&
         itemDescription.valid &&
         imageUrl.valid
       ) {
-        saveItem({
-          id,
-          timestamp: new Date(),
-          title: itemTitle.value,
-          description: itemDescription.value,
-          image: imageUrl.value,
-          price: formatStringToDecimalNumber(itemPrice.value),
-        });
+        if (
+          itemTitle.changed ||
+          itemPrice.changed ||
+          itemDescription.changed ||
+          imageUrl.changed
+        ) {
+          saveItem({
+            id,
+            timestamp: new Date(),
+            title: itemTitle.value,
+            description: itemDescription.value,
+            image: imageUrl.value,
+            price: formatStringToDecimalNumber(itemPrice.value),
+          });
+        }
         setEditModeActive(false);
       } else {
         itemTitle.forceError();
@@ -153,13 +155,18 @@ const SingleItemProvider = ({ children, item }) => {
     [id, imageUrl, itemDescription, itemPrice, itemTitle, saveItem]
   );
 
-  const handleDelete = useCallback(() => {
-    //NOTE: `confirm` is a very simple way of doing a fully accessible confirmation dialog
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('Are you sure? A product cannot be recovered once deleted.')) {
-      removeItem(id);
-    }
-  }, [id, removeItem]);
+  const handleDelete = useCallback(
+    (fromDetailPage = false) => {
+      //NOTE: `confirm` is a very simple way of doing a fully accessible confirmation dialog
+      if (
+        // eslint-disable-next-line no-restricted-globals
+        confirm('Are you sure? A product cannot be recovered once deleted.')
+      ) {
+        removeItem(id, fromDetailPage);
+      }
+    },
+    [id, removeItem]
+  );
 
   return (
     <SingleItemContext.Provider
@@ -176,7 +183,6 @@ const SingleItemProvider = ({ children, item }) => {
         handleEdit,
         handleSave,
         handleDelete,
-        handleViewItem,
       }}
     >
       {children}

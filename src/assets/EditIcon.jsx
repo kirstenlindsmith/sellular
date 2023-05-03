@@ -1,9 +1,10 @@
 import { colors } from '../constants';
 
+//source: https://www.svgrepo.com/ (then modified for react)
 const EditIcon = ({ color, size, ...rest }) => (
   <svg
-    width={size || '800px'}
-    height={size || '800px'}
+    width={size || '1rem'}
+    height={size || '1rem'}
     viewBox='0 0 24 24'
     xmlns='http://www.w3.org/2000/svg'
     {...rest}

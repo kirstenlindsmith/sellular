@@ -19,18 +19,18 @@ const ItemActionButtons = () => {
           textColor={colors.teal}
           onClick={handleEdit}
         >
-          <EditIcon size='1rem' color={colors.teal} />
+          <EditIcon color={colors.teal} />
           Edit
         </Button>
       )}
       {editModeActive && (
         <div className='save-delete-buttons'>
           <Button fullWidth onClick={handleSave} className='save-button'>
-            <SaveIcon size='1rem' color={colors.white} />
+            <SaveIcon color={colors.white} />
             Save
           </Button>
           <Button fullWidth onClick={handleDelete} color={colors.red}>
-            <DeleteIcon size='1rem' color={colors.white} />
+            <DeleteIcon color={colors.white} />
             Delete
           </Button>
         </div>

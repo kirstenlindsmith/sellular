@@ -1,6 +1,10 @@
-import { colors } from '../../../../../constants';
-import { formatStringToDollars, formatTimestamp } from '../../../../../helpers';
-import { useSingleItem } from '../../../../../hooks';
+import { useEffect, useState } from 'react';
+import { frontendRoutes } from '../../../../../constants';
+import {
+  formatStringToDollars,
+  makeLinkFromName,
+} from '../../../../../helpers';
+import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
 import Input from '../../../../shared/Input';
@@ -18,22 +22,29 @@ const SingleItem = () => {
     itemPrice,
     itemDescription,
     imageUrl,
-    handleViewItem,
-    item: {
-      id,
-      author,
-      timestamp,
-      postedAt, //NOTE: items pulled from endpoint have 'postedAt' instead of 'timestamp'
-      title,
-      description,
-      price,
-    },
+    item: { id, author, title, price },
   } = useSingleItem();
+  const { componentRef: priceRef, overflows: priceOverflows } =
+    useOverflowWatcher(price);
+
+  const [priceTitle, setPriceTitle] = useState(
+    priceOverflows ? formatStringToDollars(price) : undefined
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setPriceTitle(priceOverflows ? formatStringToDollars(price) : undefined);
+    };
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [price, priceOverflows]);
 
   return (
     <Card className='single-item'>
       {loading ? (
-        <PageLoader style={{ backgroundColor: colors.white }} />
+        <PageLoader style={{ height: '100%' }} />
       ) : (
         <>
           <div className='item-details'>
@@ -42,7 +53,7 @@ const SingleItem = () => {
                 editModeActive ? 'edit-mode' : ''
               }`}
             >
-              <div className='row'>
+              <>
                 {editModeActive ? (
                   <Input
                     name='Product name'
@@ -52,15 +63,15 @@ const SingleItem = () => {
                   />
                 ) : (
                   <Link
-                    title='View product'
-                    aria-label={`${title || 'Untitled product'}: click to view`}
                     className='title'
-                    onClick={handleViewItem}
+                    title={`Click to view ${title}`}
+                    href={`${frontendRoutes.item}/${id}`}
+                    aria-label={`Click to view ${title || 'Untitled product'}`}
                   >
                     {title || 'Untitled product'}
                   </Link>
                 )}
-              </div>
+              </>
               {editModeActive ? (
                 <div className='row center price-input'>
                   <Input
@@ -72,7 +83,9 @@ const SingleItem = () => {
                   />
                 </div>
               ) : (
-                <p className='price'>{formatStringToDollars(price)}</p>
+                <p className='price' ref={priceRef} title={priceTitle}>
+                  {formatStringToDollars(price)}
+                </p>
               )}
             </div>
             <div id={`${id}-image-container`} className='image-container'>
@@ -102,22 +115,32 @@ const SingleItem = () => {
                 <Input
                   fullWidth
                   multiline
-                  rows='5'
+                  rows='3'
                   name='description'
                   label='Product description'
                   placeholder='About this product'
                   fieldHandler={itemDescription}
                 />
               </div>
-            ) : (
-              <p className='description'>{description || ''}</p>
-            )}
+            ) : null}
           </div>
           <div className='item-footer'>
             <ItemActionButtons />
             <div className='listing-info-row submission-info'>
-              <p className='author'>{author || '(Account not found)'}</p>
-              <p>{formatTimestamp(timestamp ?? postedAt)}</p>
+              {!!author ? (
+                <p className='author'>
+                  <span style={{ fontWeight: 500 }}>Listed by:</span>{' '}
+                  <Link
+                    href={`${frontendRoutes.userItems}/${makeLinkFromName(
+                      author
+                    )}`}
+                  >
+                    {author || '(Account not found)'}
+                  </Link>
+                </p>
+              ) : (
+                <p className='author'>(Account not found)</p>
+              )}
             </div>
           </div>
         </>

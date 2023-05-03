@@ -3,7 +3,7 @@ export const frontendRoutes = {
   signIn: '/sign-in',
   signOut: '/sign-out',
   item: '/product',
-  userItems: '/my-products',
+  userItems: '/user-products',
 };
 
 export const backendRoutes = {

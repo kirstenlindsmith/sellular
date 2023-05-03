@@ -9,6 +9,7 @@ export const colors = {
   lightGreen: '#3bff61',
   green: '#319e7e',
   teal: '#12a7a3',
+  lightTeal: 'rgba(18, 163, 167, 0.1)',
   blue: '#3e97f0',
   purple: '#6f609e',
   pink: '#ba72b4',

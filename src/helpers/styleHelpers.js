@@ -4,37 +4,19 @@ const randomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 export const getLoaderDisplayTime = () => randomNumber(500, 1200);
 
-export const getUserFontSize = () => {
-  const localFontSize = parseFloat(
-    getComputedStyle(document?.documentElement)?.fontSize
-  );
-  if (Number.isNaN(localFontSize)) {
-    throw new Error('Error accessing browser font size');
-  }
-  return localFontSize;
-};
-
-export const addHexOpacity = (
-  color,
-  opacityPercentage = 0.5 /* number between 0-1 */
-) => {
-  if (!color || opacityPercentage < 0 || opacityPercentage > 1) return color;
-
-  if (opacityPercentage > 1 || opacityPercentage < 0) return color;
-  const opacity = Math.round(
-    Math.min(Math.max(opacityPercentage || 1, 0), 1) * 255
-  );
-  return `${color}${opacity.toString(16)}`.toUpperCase();
-};
-
 const findHexBrightness = (color) => {
   if (!color) return 0;
 
   const colorVal = parseInt(color.replace('#', ''), 16);
-  //tone-indifferent extractions to determine shade
-  const extractR = (colorVal >> 16) & 0xff;
+
+  /*(NOTE: this bitwise magic is something I found on stack overflow) 3+ years ago when
+  researching how to do programmatic color manipulation. Closest source I can find now
+  for context is: https://stackoverflow.com/questions/6126439/what-does-0xff-do */
+  const extractR = (colorVal >> 16) & 0xff; //tone-indifferent extractions to determine shade
   const extractG = (colorVal >> 8) & 0xff;
   const extractB = (colorVal >> 0) & 0xff;
+
+  //NOTE: the equation for perceived brightness comes from https://en.wikipedia.org/wiki/Relative_luminance
   const brightness = 0.2126 * extractR + 0.7152 * extractG + 0.0722 * extractB;
   return brightness;
 };
@@ -51,10 +33,15 @@ export const changeHexColor = (color, percent) => {
   const brightness = findHexBrightness(workingColor);
 
   //if the color is too dark to be darkened, or too light to be lightened, reverse the goal shade
+  //NOTE: these numbers are something I developed years ago through trial and error
   if ((brightness < 60 && percent < 0) || (brightness > 225 && percent > 0)) {
     workingPercent = -percent;
   }
 
+  /*NOTE: I developed this logic 3+ years ago and can't find the sources I'd used.
+  But I did find a pretty good and more-recently discussion on this type of thing here:
+  https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+  */
   //tone-preserving color conversion
   const changeAmount = Math.round(2.55 * workingPercent); //account for 0-255 instead of 0-100 color scale
   const R = (colorVal >> 16) + changeAmount;
@@ -89,7 +76,7 @@ const shouldUseBlackText = (color = colors.teal) => {
   )
     return true;
 
-  return findHexBrightness(workingColor) > 190;
+  return findHexBrightness(workingColor) > 190; //NOTE: 190 is a number I chose on my own through experimentation
 };
 
 export const bestTextColor = (color = colors.teal) =>

@@ -2,29 +2,21 @@ import { useEffect } from 'react';
 import { frontendRoutes } from '../../../constants';
 import { navigate } from '../../../helpers';
 import { useItems, useUser } from '../../../hooks';
-import sharedStyles from '../../../style/shared.styles';
 
 const SignOut = () => {
   const { setLoading, signedIn, signOut } = useUser();
-  const { setUserItems } = useItems();
+  const { handleLogoutItemRefresh } = useItems();
 
   useEffect(() => {
     if (!signedIn) navigate(frontendRoutes.signIn);
     else {
       setLoading(true);
       signOut();
-      //clear the user's items so that if the same browser logs in as a different user,
-      //they don't risk seeing the wrong user items
-      setUserItems([]);
+      handleLogoutItemRefresh();
     }
-  }, [setLoading, setUserItems, signOut, signedIn]);
+  }, [handleLogoutItemRefresh, setLoading, signOut, signedIn]);
 
-  return (
-    <div
-      className='centered-page'
-      style={sharedStyles.pageConlightBluePagetainer}
-    />
-  );
+  return <div className='centered-page' />;
 };
 
 export default SignOut;

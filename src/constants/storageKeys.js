@@ -1,5 +1,5 @@
 export const storageKeys = {
-  userName: 'sellular_user_name',
-  userItems: 'sellular_user_items',
-  allItems: 'sellular_all_items',
+  fetchedApi: 'fetched_api',
+  userName: 'user_name',
+  allItems: 'all_items',
 };

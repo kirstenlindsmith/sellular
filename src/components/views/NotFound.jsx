@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { frontendRoutes } from '../../constants';
 import { navigate } from '../../helpers';
 import Button from '../shared/Button';
-import sharedStyles from '../../style/shared.styles';
 
 const pageContentStyles = {
   maxWidth: 'max-content',
@@ -26,7 +25,7 @@ const NotFound = () => {
   }, []);
 
   return (
-    <div className='centered-page' style={sharedStyles.lightBluePage}>
+    <div className='centered-page'>
       <main className='centered-page-content' style={pageContentStyles}>
         <h1 style={headerStyles}>
           <span className='column center'>

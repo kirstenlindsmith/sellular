@@ -61,8 +61,30 @@ export const validateStringLength =
 
 export const validateDollarField = (value) => {
   if (!value) return;
-  const dollarRegex = /^(?:0|[1-9]\d+|)?(?:.?\d{0,2})?$/;
+  const dollarRegex = /^(?:0|[1-9]\d+|)?(?:\.?\d{0,2})?$/;
   if (!dollarRegex.test(value)) {
     return 'Invalid price';
+  } else if (formatStringToDecimalNumber(value) > 1000000000) {
+    return `Price too high`;
   }
 };
+
+export const normalizeName = (value) => {
+  if (!value) return;
+  const badCharacterRegex = /[^-a-z\s]+/gim;
+  return value.replace(badCharacterRegex, '');
+};
+
+export const possessiveName = (rawName = '') => {
+  if (rawName) {
+    return rawName.charAt(rawName.length - 1).toLowerCase() === 's'
+      ? rawName + `'`
+      : rawName + `'s`;
+  } else return 'User';
+};
+
+export const makeLinkFromName = (userName = '') =>
+  userName.split(' ').join(',');
+
+export const makeNameFromLink = (formattedName = '') =>
+  formattedName.split(',').join(' ');
