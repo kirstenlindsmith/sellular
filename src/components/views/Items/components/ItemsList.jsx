@@ -21,9 +21,9 @@ const ItemsList = ({ pageUserName }) => {
         setItemsPerRow(1);
       } else if (windowWidth <= breakpoints.small) {
         setItemsPerRow(2);
-      } else if (windowWidth <= breakpoints.medium) {
-        setItemsPerRow(3);
       } else if (windowWidth <= breakpoints.large) {
+        setItemsPerRow(3);
+      } else if (windowWidth <= breakpoints.xLarge) {
         setItemsPerRow(4);
       } else {
         setItemsPerRow(5);
