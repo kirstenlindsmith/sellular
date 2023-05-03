@@ -3,22 +3,6 @@ import { frontendRoutes } from '../../constants';
 import { navigate } from '../../helpers';
 import Button from '../shared/Button';
 
-const pageContentStyles = {
-  maxWidth: 'max-content',
-};
-const shrugStyles = {
-  fontSize: '2rem',
-  textAlign: 'center',
-  fontWeight: 'bold',
-};
-const headerStyles = {
-  fontSize: '1.25rem',
-  marginBottom: '2rem',
-};
-const sorryStyles = {
-  fontSize: '5rem',
-};
-
 const NotFound = () => {
   const handleReturnHome = useCallback(() => {
     navigate(frontendRoutes.home);
@@ -26,11 +10,11 @@ const NotFound = () => {
 
   return (
     <div className='centered-page'>
-      <main className='centered-page-content' style={pageContentStyles}>
-        <h1 style={headerStyles}>
+      <main className='centered-page-content not-found-page'>
+        <h1>
           <span className='column center'>
-            <span style={sorryStyles}>Sorry</span>
-            <span aria-hidden='true' style={shrugStyles}>
+            <span className='not-found-sorry'>Sorry</span>
+            <span aria-hidden='true' className='not-found-shrug'>
               ¯\_(ツ)_/¯
             </span>
           </span>

@@ -4,7 +4,11 @@ import {
   formatStringToDollars,
   makeLinkFromName,
 } from '../../../../../helpers';
-import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
+import {
+  useListImageStyles,
+  useOverflowWatcher,
+  useSingleItem,
+} from '../../../../../hooks';
 import placeholderImage from '../../../../../assets/placeholder_image.png';
 import Card from '../../../../shared/Card';
 import Input from '../../../../shared/Input';
@@ -17,13 +21,13 @@ const SingleItem = () => {
   const {
     loading,
     editModeActive,
-    imageStyles,
     itemTitle,
     itemPrice,
     itemDescription,
     imageUrl,
     item: { id, author, title, price },
   } = useSingleItem();
+  const imageStyles = useListImageStyles();
   const { componentRef: priceRef, overflows: priceOverflows } =
     useOverflowWatcher(price);
 
@@ -31,6 +35,7 @@ const SingleItem = () => {
     priceOverflows ? formatStringToDollars(price) : undefined
   );
 
+  //show price on hover if truncated
   useEffect(() => {
     const handleResize = () => {
       setPriceTitle(priceOverflows ? formatStringToDollars(price) : undefined);
@@ -105,7 +110,7 @@ const SingleItem = () => {
                 className={`item-image ${
                   !imageUrl.value ? 'placeholder-image' : ''
                 } ${editModeActive ? 'blur' : ''}`}
-                alt={`${title || 'product image'}`}
+                alt={`${title || 'untitled product'}`}
                 src={imageUrl.value || placeholderImage}
                 style={imageStyles}
               />

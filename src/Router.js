@@ -64,9 +64,9 @@ const Router = () => {
     <>
       <meta
         name='description'
-        content={route.description || 'View products & list products'}
+        content={route?.description || 'View products & list products'}
       />
-      <title>{route.title || 'Sellular'}</title>
+      <title>{route?.title || 'Sellular'}</title>
       <Component />
     </>
   );

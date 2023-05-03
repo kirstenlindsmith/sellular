@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { breakpoints } from '../constants';
 
+//NOTE: check whether the current browser window has hit (or gone below) a certain breakpoint
 export const useBreakpoint = (targetBreakpoint = breakpoints.mobile) => {
   const [hitBreakpoint, setHitBreakpoint] = useState(false);
 

@@ -55,7 +55,7 @@
 }
 
 .product-detail .product-image-container {
-  min-width: 0 !important;
+  min-width: 10vw !important;
   max-width: 50vw;
   overflow: hidden;
   margin: 0 auto;
@@ -75,7 +75,9 @@
     flex-direction: column;
   }
   .product-detail img {
-    width: 100% !important;
+    height: auto !important;
+    width: auto !important;
     max-width: 100% !important;
+    max-height: 100% !important;
   }
 }

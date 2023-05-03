@@ -81,6 +81,7 @@
   font-size: 0.75rem;
   position: absolute;
   bottom: -1.125rem;
+  white-space: nowrap;
 }
 
 .field-error .helper-text {

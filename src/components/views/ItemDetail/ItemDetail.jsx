@@ -35,6 +35,7 @@ const ItemDetail = () => {
     description,
     price,
   } = item ?? {};
+
   const [wideImage, setWideImage] = useState(false);
 
   const itemNotFound = useMemo(() => !id, [id]);
@@ -171,9 +172,13 @@ const ItemDetail = () => {
             </>
           )}
         </Card>
-        <Card fullWidth={wideImage} fullWidthAtBreakpoint={breakpoints.mobile}>
+        <Card
+          className='center'
+          fullWidth={wideImage}
+          fullWidthAtBreakpoint={breakpoints.mobile}
+        >
           <div
-            className={`product-image-container ${
+            className={`product-image-container center ${
               wideImage ? 'wide-image' : ''
             }`}
           >

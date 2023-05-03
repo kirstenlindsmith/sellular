@@ -1,30 +1,18 @@
 import { useCallback } from 'react';
 import './Input.css';
 
+//NOTE: optionally works with useTextInputState for field handling
 const Input = ({
   name,
   label,
   fieldHandler,
   fullWidth,
   multiline,
-  onBlur,
   onChange,
-  onFocus,
   error,
   startIcon,
   ...rest
 }) => {
-  const handleFocus = useCallback(() => {
-    fieldHandler?.setTouched?.(true);
-    fieldHandler?.setBlurred?.(false);
-    onFocus?.();
-  }, [fieldHandler, onFocus]);
-
-  const handleBlur = useCallback(() => {
-    fieldHandler?.setBlurred?.(true);
-    onBlur?.();
-  }, [fieldHandler, onBlur]);
-
   const handleChange = useCallback(
     (e) => {
       fieldHandler?.setValue?.(e?.target.value ?? '');
@@ -50,8 +38,6 @@ const Input = ({
           <InputComponent
             name={name}
             value={fieldHandler.value}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             onChange={handleChange}
             aria-describedby={`${name}-helper-text`}
             {...rest}
@@ -59,9 +45,9 @@ const Input = ({
           {!!label && <label htmlFor={name}>{label}</label>}
         </div>
       </div>
-      {!!fieldHandler?.error && (
+      {(!!error || !!fieldHandler?.error) && (
         <span className='helper-text' role='alert' id={`${name}-helper-text`}>
-          {fieldHandler?.error || ''}
+          {error || fieldHandler?.error || ''}
         </span>
       )}
     </div>

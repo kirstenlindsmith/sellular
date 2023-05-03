@@ -14,9 +14,3 @@ export const colors = {
   purple: '#6f609e',
   pink: '#ba72b4',
 };
-
-export const opacity = {
-  light: 0.1,
-  medium: 0.5,
-  full: 1,
-};

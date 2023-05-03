@@ -1,52 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { colors } from '../../constants';
-import { bestTextColor, interactColor } from '../../helpers';
-
-const buttonSizes = {
-  small: {
-    fontSize: '0.813rem',
-    fontWeight: 550,
-    minHeight: 'none',
-  },
-  medium: {
-    fontSize: '0.875rem',
-    fontWeight: 550,
-    minHeight: '1.875rem',
-  },
-  large: {
-    fontSize: '1rem',
-    fontWeight: 600,
-    minHeight: '2.25rem',
-  },
-};
-
-const buttonStyles = (color, textColor, size, disabled, fullWidth) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  border: 'none',
-  borderRadius: '6px',
-  padding: '0.25rem 0.5rem',
-  opacity: disabled ? 0.4 : 1,
-  backgroundColor: color,
-  color: textColor ?? bestTextColor(color),
-  width: fullWidth ? '100%' : 'auto',
-  height: 'fit-content',
-  letterSpacing: '0.01rem',
-  lineHeight: 1,
-  minHeight: buttonSizes[size].minHeight ?? buttonSizes.medium.minHeight,
-  fontWeight: buttonSizes[size].fontWeight ?? buttonSizes.medium.fontWeight,
-  fontSize: buttonSizes[size].fontSize ?? buttonSizes.medium.fontSize,
-});
-
-const hiddenOnLoadStyle = (loading) => ({
-  opacity: loading ? 0 : 1,
-  visibility: loading ? 'hidden' : 'visible',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  gap: '0.25rem',
-});
+import { colors } from '../../../constants';
+import { interactColor } from '../../../helpers';
+import { overrideButtonStyles } from './buttonHelpers';
+import './Button.css';
 
 const Button = ({
   children,
@@ -68,7 +24,7 @@ const Button = ({
 
   const currentStyle = useMemo(
     () => ({
-      ...buttonStyles(
+      ...overrideButtonStyles(
         currentColor,
         currentTextColor,
         size,
@@ -82,11 +38,13 @@ const Button = ({
 
   const handleInteract = useCallback(
     (direction) => () => {
-      if (hidden || disabled) return;
+      if (hidden || disabled) return; //if button is interactable...
       const icons = buttonRef.current?.querySelectorAll('svg');
       if (direction === 'in') {
-        setCurrentColor(interactColor(color));
+        //on hover
+        setCurrentColor(interactColor(color)); //adjust the bg color to show interaction
         if (color === 'transparent') {
+          //and darken the text and icon(s) for extra contrast on transparent buttons
           setCurrentTextColor(interactColor(textColor));
           [...icons].forEach((icon) => {
             if (!!icon?.style) {
@@ -96,9 +54,10 @@ const Button = ({
           });
         }
       } else if (direction === 'out') {
-        setCurrentColor(color);
+        //else, when done hovering
+        setCurrentColor(color); //reset the bg color
         if (color === 'transparent') {
-          setCurrentTextColor(textColor);
+          setCurrentTextColor(textColor); //and the text/icon color
           [...icons].forEach((icon) => {
             if (!!icon?.style) {
               icon.setAttribute('fill', textColor);
@@ -127,13 +86,21 @@ const Button = ({
       onMouseOver={handleInteract('in')}
       onMouseOut={handleInteract('out')}
       tabIndex={hidden ? -1 : undefined}
-      className={`${className || ''} ${hidden ? 'hidden' : ''}`}
+      className={`center button-container ${className || ''} ${
+        hidden ? 'hidden' : ''
+      }`}
       {...props}
     >
-      {loading && 'Loading...'}
+      {loading && (
+        <div className='ellipsis-loader-container'>
+          <div className='ellipsis-loader-text'>Loading</div>
+          <div aria-hidden='true' className='ellipsis-width-placeholder'>
+            Loading...
+          </div>
+        </div>
+      )}
       <div
-        className='button-content'
-        style={hiddenOnLoadStyle(loading)}
+        className={`center button-content ${loading ? 'loading' : ''}`}
         aria-hidden={loading}
       >
         {children}

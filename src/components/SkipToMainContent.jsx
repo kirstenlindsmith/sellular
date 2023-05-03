@@ -2,16 +2,7 @@ import { useCallback, useRef } from 'react';
 import { useTimeoutAction } from '../hooks';
 import Button from './shared/Button';
 
-const skipToMainStyles = {
-  position: 'absolute',
-  left: 'calc(50% - 7.5rem',
-  transition: 'all 0.25s ease',
-  height: '3.125rem',
-  maxHeight: '3.125rem',
-  padding: '2.25rem 3rem 1.5rem',
-  zIndex: '10000',
-};
-
+//NOTE: allows for user to immediately tab to the <main> of a page for accessibility
 const SkipToMainContent = () => {
   const mainContent = useRef(null);
 
@@ -31,11 +22,7 @@ const SkipToMainContent = () => {
   }, [handleTimeout]);
 
   return (
-    <Button
-      id='skip-to-main'
-      style={skipToMainStyles}
-      onClick={handleSkipToMain}
-    >
+    <Button id='skip-to-main' onClick={handleSkipToMain}>
       Skip to main content
     </Button>
   );

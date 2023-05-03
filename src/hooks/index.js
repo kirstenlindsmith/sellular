@@ -1,5 +1,6 @@
 export * from './useBreakpoint';
 export * from './useItems';
+export * from './useListImageStyles';
 export * from './useOverflowWatcher';
 export * from './usePath';
 export * from './useSingleItem';

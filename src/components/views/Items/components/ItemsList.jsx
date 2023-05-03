@@ -13,12 +13,15 @@ const ItemsList = ({ pageUserName }) => {
 
   const [itemsPerRow, setItemsPerRow] = useState(3);
 
+  //handle row size based on window width
   useEffect(() => {
     const handleResize = () => {
-      const windowWidth = window?.innerWidth ?? breakpoints.small;
+      const windowWidth = window?.innerWidth ?? breakpoints.medium;
       if (windowWidth <= breakpoints.mobile) {
         setItemsPerRow(1);
       } else if (windowWidth <= breakpoints.small) {
+        setItemsPerRow(2);
+      } else if (windowWidth <= breakpoints.medium) {
         setItemsPerRow(3);
       } else if (windowWidth <= breakpoints.large) {
         setItemsPerRow(4);

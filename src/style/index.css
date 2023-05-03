@@ -12,7 +12,6 @@
   --blue: #447b9e;
   --purple: #6f609e;
   --pink: #ba72b4;
-  --document-height: 100%;
   --box-shadow: 0px 3px 3px -2px rgba(25, 94, 89, 0.2),
     0px 3px 4px rgba(25, 94, 89, 0.14), 0px 1px 8px rgba(25, 94, 89, 0.12);
 }
@@ -45,11 +44,6 @@ a {
 a:hover,
 a:focus {
   text-decoration-style: dotted;
-}
-
-/* by default allow \n to be properly interpreted as linebreaks within table cells */
-td {
-  white-space: pre-wrap;
 }
 
 button,

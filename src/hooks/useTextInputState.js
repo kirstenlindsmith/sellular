@@ -21,7 +21,7 @@ export const useTextInputState = (options = defaultOptions) => {
     required,
     requiredText,
     normalizer,
-    validation,
+    validation, //validation runs on debounce by default. usually I'd add multiple 'validateOn' mode options
     debounceDelay,
   } = { ...defaultOptions, ...options };
 
@@ -35,7 +35,7 @@ export const useTextInputState = (options = defaultOptions) => {
   const [overrideShowError, setOverrideShowError] = useState(false);
   const [debouncedValue, setDebouncedValue] = useState(value);
 
-  const updateValue = useCallback(() => setDebouncedValue(value), [value]);
+  const updateValue = useCallback(() => setDebouncedValue(value), [value]); //callback only redefined if value changes
   useTimeoutEffect({
     callback: updateValue, //when callback changes, timer will restart
     debounceDelay,
@@ -59,6 +59,8 @@ export const useTextInputState = (options = defaultOptions) => {
     [normalizer]
   );
 
+  //allow manually triggering validation even if normal condition hasn't been met
+  //(e.g., for onSubmit validation when field hasn't been touched)
   const forceError = useCallback(() => setOverrideShowError(true), []);
 
   const reset = useCallback(() => {
@@ -76,31 +78,37 @@ export const useTextInputState = (options = defaultOptions) => {
     }
   }, [initialValue]);
 
+  //handle actual field logic
   useEffect(() => {
+    //if the value has changed but the change hasn't been recorded yet...
     if (value !== (initialValue ?? '') && !changed) {
-      setChanged(true);
-      setEverChanged(true);
-      setOverrideShowError(false);
+      setChanged(true); //record the difference in state for external use
+      setEverChanged(true); //record the field ever being changed for validation purposes
+      overrideShowError && setOverrideShowError(false); //remove manual validation override, if it was on
     } else if (changed && value === (initialValue ?? '')) {
-      setChanged(false);
+      //else, if a change was previously recorded but the state returned to its original value
+      setChanged(false); //toggle off that flag
+      //NOTE: the "changed" value is useful for quickly determining if a form value is worth saving/sending to backend
     }
+    //if the field has any validation and that condition has been met, record a valid validation error on state
     if (validation && runValidation && !!validation(debouncedValue)?.length) {
       setError(validation(debouncedValue));
     } else if (required && runValidation && debouncedValue.length < 1) {
+      //else if there was no validation error, but a required field is empty, record that error
       setError(requiredText || 'Required');
     } else if (
-      //a required input has text (and needs validation; allows hiding the error manually)
+      //a required input now has text (and validation condition is met)...
       (required && runValidation && !fieldIsEmpty(debouncedValue)) ||
-      //or, a field that used to be required was programmatically updated to no longer be required
+      //or, a field that used to be required was programmatically updated to no longer be required...
       (!required &&
         (error === 'Required' || (requiredText && error === requiredText))) ||
-      //validation no longer returning an error message
+      //or the validation no longer return an error message...
       (validation && runValidation && !validation(debouncedValue)?.length) ||
-      //interact type triggering validation has been manually reset
+      //or the validation condition is no longer active but there's an error on state...
       (validation && !runValidation && !!error?.length)
     ) {
-      setError(null);
-      if (overrideShowError) setOverrideShowError(false);
+      setError(null); //clear the error
+      overrideShowError && setOverrideShowError(false); //and remove manual validation override, if it was on
     }
   }, [
     debouncedValue,

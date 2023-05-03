@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 import { defaultTextInputState } from '../constants';
 import {
   formatNumberToToDecimalString,
@@ -43,30 +37,12 @@ const SingleItemProvider = ({ children, item }) => {
   } = item ?? new Item();
   const { userName } = useUser();
   const { removeItem, saveItem, loadingItemIds, allItems } = useItems();
-  const loading = useMemo(
-    () => loadingItemIds.includes(id),
-    [id, loadingItemIds]
-  );
 
   const [editModeActive, setEditModeActive] = useState(!!unsaved);
-  const [imageTranslate, setImageTranslate] = useState('translate(0, 0)');
-  const [imageSize, setImageSize] = useState({
-    height: undefined,
-    width: undefined,
-  });
-  const imageStyles = useMemo(
-    () => ({
-      width: imageSize.width,
-      height: imageSize.height,
-      transform: imageTranslate,
-    }),
-    [imageSize.height, imageSize.width, imageTranslate]
-  );
-
   const itemTitle = useTextInputState({
     required: true,
     initialValue: title,
-    validation: validateStringLength(25, 1),
+    validation: validateStringLength(25, 2),
   });
   const itemPrice = useTextInputState({
     required: true,
@@ -76,11 +52,16 @@ const SingleItemProvider = ({ children, item }) => {
   const itemDescription = useTextInputState({
     required: true,
     initialValue: description,
-    validation: validateStringLength(100, 1),
+    validation: validateStringLength(100, 3),
   });
   const imageUrl = useTextInputState({
     initialValue: image,
   });
+
+  const loading = useMemo(
+    () => loadingItemIds.includes(id),
+    [id, loadingItemIds]
+  );
 
   const isUserItem = useMemo(
     () =>
@@ -88,35 +69,6 @@ const SingleItemProvider = ({ children, item }) => {
       allItems.some((item) => item.author === userName && item.id === id),
     [unsaved, allItems, userName, id]
   );
-
-  //grab accurate image size to center the square-crop of image
-  useEffect(() => {
-    const getImageStyles = () => {
-      const imageElement = document?.getElementById(`${id}-image`);
-      if (!imageElement) return;
-      const width = imageElement.getBoundingClientRect()?.width ?? 0;
-      const height = imageElement.getBoundingClientRect()?.height ?? 0;
-      const isTall = width < height;
-      if (isTall) {
-        setImageSize({ height: 'auto', width: '100%' });
-      } else {
-        setImageSize({ height: '100%', width: 'auto' });
-      }
-
-      const imageContainer = document?.getElementById(`${id}-image-container`);
-      if (!imageContainer) return;
-      const containerWidth = imageContainer.getBoundingClientRect()?.width ?? 0;
-      const containerHeight =
-        imageContainer.getBoundingClientRect()?.height ?? 0;
-      const offsetX = isTall ? 0 : (width - containerWidth) / 2;
-      const offsetY = isTall ? (height - containerHeight) / 2 : 0;
-      setImageTranslate(`translate(${-offsetX}px, ${-offsetY}px)`);
-    };
-
-    getImageStyles();
-    window.addEventListener('resize', getImageStyles());
-    return () => window.removeEventListener('resize', getImageStyles());
-  }, [id]);
 
   const handleEdit = useCallback(() => setEditModeActive(true), []);
 
@@ -157,7 +109,7 @@ const SingleItemProvider = ({ children, item }) => {
 
   const handleDelete = useCallback(
     (fromDetailPage = false) => {
-      //NOTE: `confirm` is a very simple way of doing a fully accessible confirmation dialog
+      //NOTE: `confirm` is a very simple way of doing an accessible confirmation dialog
       if (
         // eslint-disable-next-line no-restricted-globals
         confirm('Are you sure? A product cannot be recovered once deleted.')
@@ -174,7 +126,6 @@ const SingleItemProvider = ({ children, item }) => {
         item,
         loading,
         editModeActive,
-        imageStyles,
         itemTitle,
         itemPrice,
         itemDescription,

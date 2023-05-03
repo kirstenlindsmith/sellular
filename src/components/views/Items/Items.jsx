@@ -7,6 +7,7 @@ import PlusIcon from '../../../assets/PlusIcon';
 import ItemsList from './components/ItemsList';
 import './Items.css';
 
+//NOTE: used to render all products, or a specific user's products (including logged in user)
 const Items = () => {
   const path = usePath();
   const { signedIn, userName } = useUser();

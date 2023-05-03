@@ -1,0 +1,20 @@
+.button-container {
+  position: relative;
+  border: none;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  height: fit-content;
+  letter-spacing: 0.01rem;
+  line-height: 1;
+}
+
+.button-content:not(.loading) {
+  opacity: 1;
+  visibility: visible;
+  gap: 0.25rem;
+}
+
+.button-content.loading {
+  opacity: 0;
+  visibility: hidden;
+}

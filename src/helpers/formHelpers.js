@@ -4,9 +4,9 @@ export const formatTimestamp = (inputDate) => {
   const day = date?.getDate() ?? 1;
   const year = date?.getFullYear() || '';
   const rawHours = date?.getHours() || 0;
-  const isPM = rawHours > 11;
+  const isPM = rawHours > 11; //getHours returns 24hr time
   let hours = isPM ? rawHours - 12 : rawHours;
-  if (hours === 0) hours = 12;
+  if (hours === 0) hours = 12; //midnight
   let minutes = date?.getMinutes() || '00';
   if (typeof minutes === 'number' && minutes < 10) {
     minutes = `0${minutes}`;
@@ -33,14 +33,14 @@ export const formatNumberToToDecimalString = (number) => {
   if (typeof number !== 'number' || isNaN(number) || number < 0) {
     return '0.00';
   }
-  return number.toFixed(2);
+  return number.toFixed(2); //always include two decimal places
 };
 
 export const formatStringToDecimalNumber = (string) => {
   if (typeof string !== 'string' || !string) {
     return 0.0;
   }
-  return Math.round(parseFloat(string) * 1e2) / 1e2;
+  return Math.round(parseFloat(string) * 1e2) / 1e2; //always include two decimal places
 };
 
 export const validateStringLength =
@@ -62,17 +62,17 @@ export const validateStringLength =
 
 export const validateDollarField = (value) => {
   if (!value) return;
-  const dollarRegex = /^(?:0|[1-9]\d+|)?(?:\.?\d{0,2})?$/;
+  const dollarRegex = /^(?:0|[1-9]\d*|)?(?:\.?\d{0,2})?$/; //matches 0.XX, or (X*).XX for digits and one dot only
   if (!dollarRegex.test(value)) {
     return 'Invalid price';
   } else if (formatStringToDecimalNumber(value) > 1000000000) {
-    return `Price too high`;
+    return '$1billion max';
   }
 };
 
 export const normalizeName = (value) => {
   if (!value) return;
-  const badCharacterRegex = /[^-a-z\s]+/gim;
+  const badCharacterRegex = /[^-a-z\s]+/gim; //blocks anything other than letters, spaces, and hyphens
   return value.replace(badCharacterRegex, '');
 };
 
@@ -84,8 +84,10 @@ export const possessiveName = (rawName = '') => {
   } else return 'User';
 };
 
-export const makeLinkFromName = (userName = '') =>
-  userName.split(' ').join(',');
+export const makeLinkFromName = (
+  userName = '' //replace spaces with commas for easier url parsing
+) => userName.split(' ').join(',');
 
-export const makeNameFromLink = (formattedName = '') =>
-  formattedName.split(',').join(' ');
+export const makeNameFromLink = (
+  formattedName = '' //swap the commas back to spaces
+) => formattedName.split(',').join(' ');

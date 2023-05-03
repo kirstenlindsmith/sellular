@@ -3,7 +3,13 @@ import { colors } from '../constants';
 const randomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
+//NOTE: it just felt more realistic to not have the exact same spoofed load delay every time
 export const getLoaderDisplayTime = () => randomNumber(500, 1200);
+
+////////////////////////////////////////////////////////////////////////
+// NOTE: below this point are color functions I developed myself long //
+// ago that I've reused many times since because they're so useful!   //
+////////////////////////////////////////////////////////////////////////
 
 const findHexBrightness = (color) => {
   if (!color) return 0;
@@ -62,7 +68,7 @@ export const changeHexColor = (color, percent) => {
   );
 };
 
-export const interactColor = (color) => changeHexColor(color, -10);
+export const interactColor = (color) => changeHexColor(color, -10); //-10 is an arbitrary number I chose on my own through experimentation
 
 const shouldUseBlackText = (color = colors.teal) => {
   let workingColor = color;
@@ -77,7 +83,7 @@ const shouldUseBlackText = (color = colors.teal) => {
   )
     return true;
 
-  return findHexBrightness(workingColor) > 190; //NOTE: 190 is a number I chose on my own through experimentation
+  return findHexBrightness(workingColor) > 190; //NOTE: 190 is an arbitrary number I chose on my own through experimentation
 };
 
 export const bestTextColor = (color = colors.teal) =>

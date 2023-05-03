@@ -28,6 +28,7 @@ export const ItemsContext = createContext(initialValue);
 
 const ItemsProvider = ({ children }) => {
   const { userName } = useUser();
+
   const [loading, setLoading] = useState(false);
   const [loadingItemIds, setLoadingItemIds] = useState([]);
   const [allItems, setAllItems] = useState(() =>
@@ -69,7 +70,8 @@ const ItemsProvider = ({ children }) => {
   }, [resetLoadingStateAfterDelay]);
 
   useEffect(() => {
-    //pull remote items if needed (NOTE: this works even if an offline user adds a custom item, then connects to the internet lol)
+    //pull remote items if needed
+    //NOTE: this works even if an offline user adds a custom item, then connects to the internet lol
     if (!getItem(storageKeys.fetchedApi) && navigator.onLine) {
       fetchRemoteItems().then((items) => {
         const itemIds = new Set();

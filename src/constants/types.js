@@ -1,3 +1,4 @@
+//NOTE: not a "type" but since this is reused and serves a similar purpose I felt like putting it here
 export const defaultTextInputState = {
   value: '',
   debouncedValue: '',

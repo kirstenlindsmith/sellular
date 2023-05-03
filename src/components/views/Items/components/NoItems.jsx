@@ -14,10 +14,10 @@ const NoItems = ({ myItems, userItems }) => {
   }, [myItems, userItems]);
 
   return (
-    <div className='column center' style={{ margin: 'auto' }}>
+    <div className='column center no-items'>
       <p>{copy}</p>
       {!userItems && (
-        <Button onClick={addItem} style={{ marginTop: '1rem' }}>
+        <Button onClick={addItem}>
           <PlusIcon color={colors.white} />
           Add one
         </Button>

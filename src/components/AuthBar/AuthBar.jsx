@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { useCallback, useMemo } from 'react';
 import { colors, frontendRoutes } from '../../constants';
 import { usePath, useUser } from '../../hooks';
@@ -23,6 +22,7 @@ const AuthBar = () => {
   );
 
   const handleBack = useCallback(() => {
+    /* eslint-disable no-restricted-globals */
     history?.back();
   }, []);
 

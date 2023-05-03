@@ -1,5 +1,6 @@
 import { Component } from 'react';
 
+//NOTE: my only remaining usecase for class components is the componentDidCatch method lol
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
