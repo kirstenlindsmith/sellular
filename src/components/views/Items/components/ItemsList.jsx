@@ -9,7 +9,7 @@ import SingleItemProvider from '../../../../context/singleItemContext';
 
 const ItemsList = ({ pageUserName }) => {
   const { userName } = useUser();
-  const { allItems, userItems, loading } = useItems();
+  const { allItems, loading } = useItems();
 
   const [itemsPerRow, setItemsPerRow] = useState(3);
 
@@ -41,10 +41,9 @@ const ItemsList = ({ pageUserName }) => {
   );
   const filteredItems = useMemo(() => {
     if (!!pageUserName) {
-      if (myItems) return userItems;
-      else return allItems.filter((item) => item.author === pageUserName);
+      return allItems.filter((item) => item.author === pageUserName);
     } else return allItems;
-  }, [allItems, myItems, pageUserName, userItems]);
+  }, [allItems, pageUserName]);
   const groupedItems = useMemo(
     () => makeRowGroups(filteredItems, itemsPerRow),
     [filteredItems, itemsPerRow]
@@ -69,7 +68,7 @@ const ItemsList = ({ pageUserName }) => {
                   className='single-item placeholder-item'
                 />
               ) : (
-                <SingleItemProvider key={item.id} item={item}>
+                <SingleItemProvider key={item?.id ?? Math.random()} item={item}>
                   <SingleItem />
                 </SingleItemProvider>
               );

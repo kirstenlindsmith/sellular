@@ -1,17 +1,13 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { backendRoutes, frontendRoutes, storageKeys } from '../constants';
 import {
   filterOutTarget,
   getArrayItem,
+  getItem,
   getLoaderDisplayTime,
   navigate,
   setArrayItem,
+  setItem,
   setItemAttributes,
 } from '../helpers';
 import { useTimeoutAction, useUser } from '../hooks';
@@ -34,19 +30,8 @@ const ItemsProvider = ({ children }) => {
   const { userName } = useUser();
   const [loading, setLoading] = useState(false);
   const [loadingItemIds, setLoadingItemIds] = useState([]);
-  const [userItems, setUserItems] = useState(() =>
-    getArrayItem(storageKeys.userItems).filter(
-      (item) => item.author === userName
-    )
-  );
   const [allItems, setAllItems] = useState(() =>
     getArrayItem(storageKeys.allItems)
-  );
-
-  const hasUserItems = useMemo(
-    () =>
-      !!userItems.length || allItems.some((item) => item.author === userName),
-    [allItems, userItems.length, userName]
   );
 
   const resetLoadingState = useCallback(() => setLoading(false), []);
@@ -70,40 +55,43 @@ const ItemsProvider = ({ children }) => {
     try {
       const response = await fetch(backendRoutes.items);
       const data = await response.json();
+      setItem(storageKeys.fetchedApi, 'true');
       resetLoadingStateAfterDelay();
       return data?.items ?? [];
     } catch (error) {
       setLoading(false);
       console.error(
-        `${error?.message || 'Error'}: ${error || '(details unknown)'}`
+        `Something went wrong — ${error?.message || 'Error'}: ${
+          error || '(details unknown)'
+        }`
       );
     }
   }, [resetLoadingStateAfterDelay]);
 
   useEffect(() => {
-    //pull remote items if needed
-    if (!allItems.length || userItems.length === allItems.length) {
+    //pull remote items if needed (NOTE: this works even if an offline user adds a custom item, then connects to the internet lol)
+    if (!getItem(storageKeys.fetchedApi) && navigator.onLine) {
       fetchRemoteItems().then((items) => {
-        const newItems = [...userItems, ...items];
+        const itemIds = new Set();
+        const existingItems = getArrayItem(storageKeys.allItems);
+        const newItems = [...existingItems, ...(items ?? [])].filter((item) => {
+          //make sure to never allow duplicates
+          if (!itemIds.has(item.id)) {
+            itemIds.add(item.id);
+            return true;
+          } else return false;
+        });
         setAllItems(newItems);
         setArrayItem(storageKeys.allItems, newItems);
       });
     }
-  }, [allItems.length, fetchRemoteItems, userItems]);
-
-  useEffect(() => {
-    //populate user's own items if needed
-    if (!userItems.length && hasUserItems) {
-      setUserItems(allItems.filter((item) => item.author === userName));
-    }
-  }, [allItems, hasUserItems, userItems.length, userName]);
+  }, [allItems.length, fetchRemoteItems]);
 
   const addItem = useCallback(() => {
     const NewItem = new Item();
     NewItem.id = crypto.randomUUID();
     NewItem.author = userName;
     NewItem.unsaved = true; //temporary flag
-    setUserItems((current) => [NewItem, ...current]);
     setAllItems((current) => [NewItem, ...current]);
   }, [userName]);
 
@@ -111,47 +99,39 @@ const ItemsProvider = ({ children }) => {
     (newItem) => {
       newItem.unsaved = false; //toggle temporary flag;
       setLoadingItemIds((current) => [...current, newItem.id]);
-      const newUserItems = userItems.map(setItemAttributes(newItem));
       const newAllItems = allItems.map(setItemAttributes(newItem));
-      setUserItems(newUserItems);
       setAllItems(newAllItems);
-      setArrayItem(storageKeys.userItems, newUserItems);
       setArrayItem(storageKeys.allItems, newAllItems);
       delete newItem.unsaved; //delete temporary flag
       resetLoadingIdsAfterDelay(newItem.id);
     },
-    [allItems, resetLoadingIdsAfterDelay, userItems]
+    [allItems, resetLoadingIdsAfterDelay]
   );
 
   const removeItem = useCallback(
     (targetItemId, fromDetailPage = false) => {
       if (!targetItemId) return;
       setLoadingItemIds((current) => [...current, targetItemId]);
-      const newUserItems = userItems.filter(filterOutTarget(targetItemId));
       const newAllItems = allItems.filter(filterOutTarget(targetItemId));
       const handleDeleteAfterLoad = () => {
         if (fromDetailPage) navigate(frontendRoutes.home);
-        setUserItems(newUserItems);
         setAllItems(newAllItems);
-        setArrayItem(storageKeys.userItems, newUserItems);
         setArrayItem(storageKeys.allItems, newAllItems);
       };
       resetLoadingIdsAfterDelay(targetItemId, handleDeleteAfterLoad);
     },
-    [allItems, resetLoadingIdsAfterDelay, userItems]
+    [allItems, resetLoadingIdsAfterDelay]
   );
 
   /*NOTE: clear the user's items so that if the same browser logs in as a different user,
   they don't risk seeing the wrong user items. Also removes any unsaved items still in edit mode*/
   const handleLogoutItemRefresh = useCallback(() => {
-    setUserItems([]);
     setAllItems((current) => current.filter((item) => !item.unsaved));
   }, []);
 
   return (
     <ItemsContext.Provider
       value={{
-        userItems,
         allItems,
         loading,
         loadingItemIds,

@@ -22,7 +22,7 @@ const ItemDetailContainer = () => {
     [path]
   );
   const item = useMemo(
-    () => allItems.find((item) => item.id === itemId),
+    () => allItems.find((item) => item?.id === itemId),
     [allItems, itemId]
   );
 

@@ -24,16 +24,17 @@ const ItemDetail = () => {
     handleEdit,
     handleSave,
     handleDelete,
-    item: {
-      id,
-      author,
-      timestamp,
-      postedAt, //NOTE: items pulled from endpoint have 'postedAt' instead of 'timestamp'
-      title,
-      description,
-      price,
-    },
+    item,
   } = useSingleItem();
+  const {
+    id,
+    author,
+    timestamp,
+    postedAt, //NOTE: items pulled from endpoint have 'postedAt' instead of 'timestamp'
+    title,
+    description,
+    price,
+  } = item ?? {};
   const [wideImage, setWideImage] = useState(false);
 
   const itemNotFound = useMemo(() => !id, [id]);
