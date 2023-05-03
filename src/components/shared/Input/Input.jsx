@@ -40,7 +40,7 @@ const Input = ({
 
   return (
     <div
-      className={`input-section ${fullWidth ? 'full-width' : ''}${
+      className={`input-section ${fullWidth ? 'full-width' : ''} ${
         error || fieldHandler?.error ? 'field-error' : ''
       }`}
     >

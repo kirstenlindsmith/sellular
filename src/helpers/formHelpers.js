@@ -5,7 +5,8 @@ export const formatTimestamp = (inputDate) => {
   const year = date?.getFullYear() || '';
   const rawHours = date?.getHours() || 0;
   const isPM = rawHours > 11;
-  const hours = isPM ? rawHours - 12 : rawHours;
+  let hours = isPM ? rawHours - 12 : rawHours;
+  if (hours === 0) hours = 12;
   let minutes = date?.getMinutes() || '00';
   if (typeof minutes === 'number' && minutes < 10) {
     minutes = `0${minutes}`;
