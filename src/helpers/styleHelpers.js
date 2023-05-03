@@ -2,6 +2,7 @@ import { colors } from '../constants';
 
 const randomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
+
 export const getLoaderDisplayTime = () => randomNumber(500, 1200);
 
 const findHexBrightness = (color) => {
