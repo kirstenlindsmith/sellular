@@ -6,6 +6,7 @@ import {
   validateStringLength,
 } from '../../../helpers';
 import { useTextInputState, useUser } from '../../../hooks';
+import slowBlink from '../../../assets/slow_blink.gif';
 import Button from '../../shared/Button';
 import Input from '../../shared/Input';
 import './SignIn.css';
@@ -34,8 +35,10 @@ const SignIn = () => {
   return (
     <div className='centered-page sign-in'>
       <form onSubmit={handleSignIn}>
+        <img src={slowBlink} alt='blinking eye' style={{ width: '20rem' }} />
         <h1>Welcome</h1>
         <Input
+          fullWidth
           name='name'
           label='Name'
           placeholder='Enter your name (case sensitive)'

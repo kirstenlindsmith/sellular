@@ -135,11 +135,6 @@ const ItemDetail = () => {
                   {formatStringToDollars(price)}
                 </p>
               )}
-              <p className='field'>
-                <span className='field-name'>Listed by: </span>
-                {author || '(Account not found)'} at{' '}
-                {formatTimestamp(timestamp ?? postedAt)}
-              </p>
               {editModeActive ? (
                 <div className='field edit-mode'>
                   <Input
@@ -168,6 +163,11 @@ const ItemDetail = () => {
                   />
                 </div>
               )}
+              <p className='field'>
+                <span className='field-name'>Listed by: </span>
+                {author || '(Account not found)'} at{' '}
+                {formatTimestamp(timestamp ?? postedAt)}
+              </p>
             </>
           )}
         </Card>

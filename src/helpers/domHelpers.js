@@ -1,6 +1,6 @@
 import { tooltipDelayMs } from '../constants';
 
-export const remToPixels = (remString = '1rem') => {
+const remToPixels = (remString = '1rem') => {
   const rem = parseFloat(remString.slice(0, remString.indexOf('rem')));
   if (Number.isNaN(rem)) {
     console.error('Invalid rem value: ', remString);
