@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+//NOTE: determines whether an element is truncated.
 export const useOverflowWatcher = (watch) => {
   const componentRef = useRef(null);
   const [overflows, setOverflows] = useState(false);

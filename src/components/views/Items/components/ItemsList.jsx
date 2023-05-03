@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { breakpoints, colors } from '../../../../constants';
+import { breakpoints } from '../../../../constants';
 import { makeRowGroups } from '../../../../helpers';
 import { useItems, useUser } from '../../../../hooks';
 import NoItems from './NoItems';
@@ -81,13 +81,7 @@ const ItemsList = ({ pageUserName }) => {
   );
 
   return (
-    <div className='items-list'>
-      {loading ? (
-        <PageLoader style={{ backgroundColor: 'transparent' }} />
-      ) : (
-        <Items />
-      )}
-    </div>
+    <div className='items-list'>{loading ? <PageLoader /> : <Items />}</div>
   );
 };
 

@@ -122,21 +122,28 @@ const SingleItemProvider = ({ children, item }) => {
 
   const handleSave = useCallback(
     (e) => {
-      e.preventDefault();
+      e?.preventDefault();
       if (
         itemTitle.valid &&
         itemPrice.valid &&
         itemDescription.valid &&
         imageUrl.valid
       ) {
-        saveItem({
-          id,
-          timestamp: new Date(),
-          title: itemTitle.value,
-          description: itemDescription.value,
-          image: imageUrl.value,
-          price: formatStringToDecimalNumber(itemPrice.value),
-        });
+        if (
+          itemTitle.changed ||
+          itemPrice.changed ||
+          itemDescription.changed ||
+          imageUrl.changed
+        ) {
+          saveItem({
+            id,
+            timestamp: new Date(),
+            title: itemTitle.value,
+            description: itemDescription.value,
+            image: imageUrl.value,
+            price: formatStringToDecimalNumber(itemPrice.value),
+          });
+        }
         setEditModeActive(false);
       } else {
         itemTitle.forceError();

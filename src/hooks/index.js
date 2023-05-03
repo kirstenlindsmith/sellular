@@ -1,6 +1,4 @@
 export * from './useBreakpoint';
-export * from './useDebounce';
-export * from './useDocumentHeight';
 export * from './useItems';
 export * from './useOverflowWatcher';
 export * from './usePath';

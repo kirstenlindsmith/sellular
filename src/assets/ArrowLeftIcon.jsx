@@ -1,5 +1,6 @@
 import { colors } from '../constants';
 
+//source: https://www.svgrepo.com/ (then modified for react)
 const ArrowLeftIcon = ({ color, size, ...rest }) => (
   <svg
     fill={color || colors.black}

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { colors, frontendRoutes } from '../../../../../constants';
+import { frontendRoutes } from '../../../../../constants';
 import {
   formatStringToDollars,
-  formatTimestamp,
   makeLinkFromName,
 } from '../../../../../helpers';
 import { useOverflowWatcher, useSingleItem } from '../../../../../hooks';
@@ -23,15 +22,7 @@ const SingleItem = () => {
     itemPrice,
     itemDescription,
     imageUrl,
-    item: {
-      id,
-      author,
-      timestamp,
-      postedAt, //NOTE: items pulled from endpoint have 'postedAt' instead of 'timestamp'
-      title,
-      description,
-      price,
-    },
+    item: { id, author, title, price },
   } = useSingleItem();
   const { componentRef: priceRef, overflows: priceOverflows } =
     useOverflowWatcher(price);
@@ -53,9 +44,7 @@ const SingleItem = () => {
   return (
     <Card className='single-item'>
       {loading ? (
-        <PageLoader
-          style={{ backgroundColor: 'transparent', height: '100%' }}
-        />
+        <PageLoader style={{ height: '100%' }} />
       ) : (
         <>
           <div className='item-details'>
@@ -126,32 +115,32 @@ const SingleItem = () => {
                 <Input
                   fullWidth
                   multiline
-                  rows='5'
+                  rows='3'
                   name='description'
                   label='Product description'
                   placeholder='About this product'
                   fieldHandler={itemDescription}
                 />
               </div>
-            ) : (
-              <p className='description'>{description || ''}</p>
-            )}
+            ) : null}
           </div>
           <div className='item-footer'>
             <ItemActionButtons />
             <div className='listing-info-row submission-info'>
               {!!author ? (
-                <Link
-                  href={`${frontendRoutes.userItems}/${makeLinkFromName(
-                    author
-                  )}`}
-                >
-                  <p className='author'>{author || '(Account not found)'}</p>
-                </Link>
+                <p className='author'>
+                  <span style={{ fontWeight: 500 }}>Listed by:</span>{' '}
+                  <Link
+                    href={`${frontendRoutes.userItems}/${makeLinkFromName(
+                      author
+                    )}`}
+                  >
+                    {author || '(Account not found)'}
+                  </Link>
+                </p>
               ) : (
                 <p className='author'>(Account not found)</p>
               )}
-              <p>{formatTimestamp(timestamp ?? postedAt)}</p>
             </div>
           </div>
         </>

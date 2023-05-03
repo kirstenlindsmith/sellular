@@ -25,7 +25,7 @@ const initialValue = {
   addItem: () => undefined,
   saveItem: () => undefined,
   removeItem: () => undefined,
-  setUserItems: () => undefined,
+  handleLogoutItemRefresh: () => undefined,
 };
 
 export const ItemsContext = createContext(initialValue);
@@ -141,17 +141,24 @@ const ItemsProvider = ({ children }) => {
     [allItems, resetLoadingIdsAfterDelay, userItems]
   );
 
+  /*NOTE: clear the user's items so that if the same browser logs in as a different user,
+  they don't risk seeing the wrong user items. Also removes any unsaved items still in edit mode*/
+  const handleLogoutItemRefresh = useCallback(() => {
+    setUserItems([]);
+    setAllItems((current) => current.filter((item) => !item.unsaved));
+  }, []);
+
   return (
     <ItemsContext.Provider
       value={{
         userItems,
-        setUserItems,
         allItems,
         loading,
         loadingItemIds,
         addItem,
         saveItem,
         removeItem,
+        handleLogoutItemRefresh,
       }}
     >
       {children}

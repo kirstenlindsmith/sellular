@@ -1,5 +1,6 @@
 import { colors } from '../constants';
 
+//source: https://www.svgrepo.com/ (then modified for react)
 const DeleteIcon = ({ color, size, ...rest }) => (
   <svg
     width={size || '1rem'}

@@ -71,9 +71,7 @@ const ItemDetail = () => {
     getImageStyles();
   }, [id]);
 
-  return loading ? (
-    <PageLoader />
-  ) : (
+  return (
     <div className='product-detail standard-page'>
       <main className={`header-row ${editModeActive ? 'edit-mode' : ''}`}>
         <h1>
@@ -118,52 +116,58 @@ const ItemDetail = () => {
           className={`description-card ${editModeActive ? 'edit-mode' : ''}`}
           fullWidthAtBreakpoint={breakpoints.mobile}
         >
-          {editModeActive ? (
-            <Input
-              name='price'
-              label='Price'
-              placeholder='0.00'
-              fieldHandler={itemPrice}
-              startIcon={<p>$</p>}
-            />
+          {loading ? (
+            <PageLoader style={{ height: '100%' }} />
           ) : (
-            <p className='field'>
-              <span className='field-name'>Price: </span>
-              {formatStringToDollars(price)}
-            </p>
-          )}
-          <p className='field'>
-            <span className='field-name'>Listed by: </span>
-            {author || '(Account not found)'} at{' '}
-            {formatTimestamp(timestamp ?? postedAt)}
-          </p>
-          {editModeActive ? (
-            <div className='field edit-mode'>
-              <Input
-                fullWidth
-                multiline
-                rows='5'
-                name='description'
-                label='Product details'
-                placeholder='About this product'
-                fieldHandler={itemDescription}
-              />
-            </div>
-          ) : (
-            <p className='field'>
-              <span className='field-name'>Product details: </span>
-              {description}
-            </p>
-          )}
-          {editModeActive && (
-            <div className='field edit-mode'>
-              <Input
-                name='image'
-                label='Image URL'
-                placeholder='http://link-to-image.com/image.jpg'
-                fieldHandler={imageUrl}
-              />
-            </div>
+            <>
+              {editModeActive ? (
+                <Input
+                  name='price'
+                  label='Price'
+                  placeholder='0.00'
+                  fieldHandler={itemPrice}
+                  startIcon={<p>$</p>}
+                />
+              ) : (
+                <p className='field'>
+                  <span className='field-name'>Price: </span>
+                  {formatStringToDollars(price)}
+                </p>
+              )}
+              <p className='field'>
+                <span className='field-name'>Listed by: </span>
+                {author || '(Account not found)'} at{' '}
+                {formatTimestamp(timestamp ?? postedAt)}
+              </p>
+              {editModeActive ? (
+                <div className='field edit-mode'>
+                  <Input
+                    fullWidth
+                    multiline
+                    rows='5'
+                    name='description'
+                    label='Product details'
+                    placeholder='About this product'
+                    fieldHandler={itemDescription}
+                  />
+                </div>
+              ) : (
+                <p className='field'>
+                  <span className='field-name'>Product details: </span>
+                  {description}
+                </p>
+              )}
+              {editModeActive && (
+                <div className='field edit-mode'>
+                  <Input
+                    name='image'
+                    label='Image URL'
+                    placeholder='http://link-to-image.com/image.jpg'
+                    fieldHandler={imageUrl}
+                  />
+                </div>
+              )}
+            </>
           )}
         </Card>
         <Card fullWidth={wideImage} fullWidthAtBreakpoint={breakpoints.mobile}>
@@ -172,10 +176,16 @@ const ItemDetail = () => {
               wideImage ? 'wide-image' : ''
             }`}
           >
+            {loading && (
+              <PageLoader
+                style={{ height: '100%', position: 'absolute', zIndex: 100 }}
+              />
+            )}
             <img
               id={`${id}-image`}
               alt={`${title || 'product image'}`}
               src={imageUrl.value || placeholderImage}
+              className={loading ? 'blur' : ''}
               style={detailImageStyles}
             />
           </div>

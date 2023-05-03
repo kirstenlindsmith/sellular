@@ -5,18 +5,16 @@ import { useItems, useUser } from '../../../hooks';
 
 const SignOut = () => {
   const { setLoading, signedIn, signOut } = useUser();
-  const { setUserItems } = useItems();
+  const { handleLogoutItemRefresh } = useItems();
 
   useEffect(() => {
     if (!signedIn) navigate(frontendRoutes.signIn);
     else {
       setLoading(true);
       signOut();
-      //clear the user's items so that if the same browser logs in as a different user,
-      //they don't risk seeing the wrong user items
-      setUserItems([]);
+      handleLogoutItemRefresh();
     }
-  }, [setLoading, setUserItems, signOut, signedIn]);
+  }, [handleLogoutItemRefresh, setLoading, signOut, signedIn]);
 
   return <div className='centered-page' />;
 };
